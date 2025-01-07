@@ -1,0 +1,10 @@
+{
+  "version": "0",
+  "npmClient": "npm",
+  "type": "app",
+  "name": "dhis2",
+  "allowedParams": {
+    "host": false,
+    "id": false
+  }
+}

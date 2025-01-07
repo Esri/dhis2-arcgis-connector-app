@@ -1,0 +1,24 @@
+{
+  "name": "dhis2-aggregate-provider",
+  "version": "0.1.0",
+  "description": "An opinionated provider template for koop-cli",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha 'test/**/*.test.js'",
+    "start": "koop serve"
+  },
+  "dependencies": {
+    "config": "^3.3.9"
+  },
+  "devDependencies": {
+    "@koopjs/cli": "^1.1.7",
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  },
+  "repository": "",
+  "keywords": [
+    "koop",
+    "plugin",
+    "provider"
+  ]
+}

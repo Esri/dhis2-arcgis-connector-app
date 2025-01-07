@@ -1,0 +1,29 @@
+{
+  "name": "kp-app",
+  "version": "0.1.0",
+  "description": "A project template for Koop",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "mocha 'test/**/*.test.js'",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@koopjs/koop-core": "^10.1.0",
+    "config": "^3.3.9",
+    "dotenv": "^16.4.7",
+    "fs-extra": "^11.2.0",
+    "klaw-sync": "^6.0.0",
+    "os": "^0.1.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  },
+  "repository": "",
+  "private": true,
+  "keywords": [
+    "koop",
+    "app"
+  ]
+}
