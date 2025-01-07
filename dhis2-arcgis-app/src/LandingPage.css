@@ -19,7 +19,7 @@
   position: absolute;
   top: 15px;
   left: 242px;
-  background: #2C6693;
+  background: #2c6693;
 }
 
 .dhis2-to-arcgis-connector-app {
@@ -30,7 +30,7 @@
   left: 242px;
   color: white;
   font-size: 14px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 700;
 }
 
@@ -40,7 +40,7 @@
   position: absolute;
   top: 49px;
   left: 0;
-  background: #D9D9D9;
+  background: #d9d9d9;
 }
 
 .frame1 {
@@ -61,7 +61,7 @@
   text-align: center;
   color: black;
   font-size: 64px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -74,7 +74,7 @@
   text-align: center;
   color: black;
   font-size: 24px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -89,16 +89,16 @@
 .button {
   padding: 12px 18px;
   font-size: 20px;
-  font-family: 'Avenir Next World', sans-serif;
+  font-family: "Avenir Next World", sans-serif;
   font-weight: 400;
   color: white;
-  background: #007AC2;
+  background: #007ac2;
 }
 
 .button[appearance="outline"] {
   background: transparent;
-  border: 1.5px solid #007AC2;
-  color: #007AC2;
+  border: 1.5px solid #007ac2;
+  color: #007ac2;
 }
 
 .arcgis-online {
