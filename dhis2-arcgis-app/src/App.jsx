@@ -3,13 +3,12 @@ import i18n from '@dhis2/d2-i18n';
 import React from 'react';
 import classes from './App.module.css';
 import { setAssetPath } from "@esri/calcite-components/dist/components";
-// define the custom elements on the browser
+
+// Calcite components
 import "@esri/calcite-components/dist/components/calcite-button.js";
 import "@esri/calcite-components/dist/components/calcite-icon.js";
 import "@esri/calcite-components/dist/components/calcite-slider.js";
 import "@esri/calcite-components/dist/calcite/calcite.css";
-
-// import the React wrapper components
 import { CalciteButton, CalciteIcon, CalciteSlider } from "@esri/calcite-components-react";
 
 // Local assets
