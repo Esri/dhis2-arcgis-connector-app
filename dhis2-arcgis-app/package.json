@@ -14,6 +14,7 @@
     "@dhis2/cli-app-scripts": "^12.0.0"
   },
   "dependencies": {
-    "@dhis2/app-runtime": "^3.12.0"
+    "@dhis2/app-runtime": "^3.12.0",
+    "@esri/calcite-components-react": "^2.13.2"
   }
 }

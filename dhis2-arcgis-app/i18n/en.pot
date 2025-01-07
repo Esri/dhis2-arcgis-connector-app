@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-01-06T16:41:49.874Z\n"
-"PO-Revision-Date: 2025-01-06T16:41:49.875Z\n"
+"POT-Creation-Date: 2025-01-07T18:24:00.919Z\n"
+"PO-Revision-Date: 2025-01-07T18:24:00.921Z\n"
 
 msgid "ERROR"
 msgstr "ERROR"
@@ -19,3 +19,6 @@ msgstr "Hello {{name}}"
 
 msgid "Welcome to DHIS2!"
 msgstr "Welcome to DHIS2!"
+
+msgid "Add something"
+msgstr "Add something"
