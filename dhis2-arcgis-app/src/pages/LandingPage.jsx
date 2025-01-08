@@ -24,7 +24,6 @@ const Header = styled.div`
   text-align: center;
   color: black;
   font-size: 64px;
-  font-family: "Avenir Next World, Arial, sans-serif";
   font-weight: 400;
   word-wrap: break-word;
 `;
@@ -35,7 +34,6 @@ const Container = styled.div`
   text-align: center;
   color: black;
   font-size: 24px;
-  font-family: "Avenir Next World, Arial, sans-serif";
   font-weight: 400;
   word-wrap: break-word;
 `;
@@ -46,7 +44,6 @@ const DocContainer = styled.div`
   text-align: center;
   color: #00619b;
   font-size: 12px;
-  font-family: "Avenir Next World, Arial, sans-serif";
 `;
 
 const ButtonContainer = styled.div`
@@ -105,9 +102,10 @@ const LandingPage = () => {
         </Container>
         <CalciteCard>
           <ButtonContainer>
-            <Button onClick={signIn}>Sign In with ArcGIS Online</Button>
+            <Button onClick={signIn} scale="l">Sign In with ArcGIS Online</Button>
             <CalciteButton
               onClick={handleSignInEnterprise}
+              scale="l"
               appearance="outline"
             >
               Sign In with ArcGIS Enterprise
