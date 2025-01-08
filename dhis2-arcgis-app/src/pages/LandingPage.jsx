@@ -16,6 +16,7 @@ const StyledLandingPage = styled(CalcitePanel)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: white;
 `;
 
 const Header = styled.div`
