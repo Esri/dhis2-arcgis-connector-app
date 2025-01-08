@@ -13,6 +13,50 @@ const StyledLandingPage = styled(CalcitePanel)`
   height: 100vh;
   padding: 1.5rem;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: black;
+  font-size: 64px;
+  font-family: "Avenir Next World, Arial, sans-serif";
+  font-weight: 400;
+  word-wrap: break-word;
+`;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: black;
+  font-size: 24px;
+  font-family: "Avenir Next World, Arial, sans-serif";
+  font-weight: 400;
+  word-wrap: break-word;
+`;
+
+const DocContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: #00619B;
+  font-size: 12px;
+  font-family: "Avenir Next World, Arial, sans-serif";
+  `;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+`;
+
+const Button = styled(CalciteButton)`
+  margin-right: 2rem;
 `;
 
 const LandingPage = () => {
@@ -28,48 +72,33 @@ const LandingPage = () => {
 
   return (
     <StyledLandingPage>
-      <div
-        style={{
-          // Welcome to the <br/>DHIS2 to ArcGIS Connector
-          color: "black",
-          fontSize: 64,
-          fontFamily: "Inter",
-          fontWeight: "400",
-          wordWrap: "break-word",
-        }}
-      >
-        DHIS2 to ArcGIS Connector App
-      </div>
-      <div className="rectangle2"></div>
-      <CalciteCard className="frame1">
-        <CalciteLabel className="dhis2-to-arcgis-connector">
-          DHIS2 to ArcGIS Connector
+      <Header>
+        Welcome to the <br />DHIS2 to ArcGIS Connector App
+      </Header>
+      <Container>
+        <CalciteLabel>
+          <p>Integrate your DHIS2 data into your ArcGIS Online or ArcGIS Enterprise<br />organization to enable seamless data sharing, analysis, and visualization.</p>
+          <p>To get started, you will need to configure the connection between your<br />ArcGIS and DHIS2 instance through a few short steps.</p>
         </CalciteLabel>
-        <CalciteLabel className="integrate-your-dhis2-data">
-          Integrate your DHIS2 data into your ArcGIS Online or ArcGIS Enterprise
-          organization to enable seamless data sharing, analysis, and
-          visualization.
-        </CalciteLabel>
-        <div className="sign-in-buttons">
-          <CalciteButton className="button" onClick={signIn}>
+      </Container>
+      <CalciteCard>
+        <ButtonContainer>
+          <Button onClick={signIn}>
             Sign In with ArcGIS Online
-          </CalciteButton>
-          <CalciteButton
-            className="button"
-            onClick={handleSignInEnterprise}
-            appearance="outline"
-          >
+          </Button>
+          <CalciteButton onClick={handleSignInEnterprise} appearance="outline">
             Sign In with ArcGIS Enterprise
           </CalciteButton>
-        </div>
+        </ButtonContainer>
         <div className="arcgis-online">
           <div className="logo"></div>
         </div>
       </CalciteCard>
-      {/* <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-        <CalciteButton onClick={handleSignInOnline}>Online</CalciteButton>
-        <CalciteButton>Enterprise</CalciteButton>
-      </div> */}
+      <DocContainer>
+        <CalciteLabel>
+          <p><a href="https://www.esri.com/en-us/arcgis/products/arcgis-online/overview" target="_blank">Not sure? View the documentation here.</a></p>
+        </CalciteLabel>
+      </DocContainer>
     </StyledLandingPage>
   );
 };
