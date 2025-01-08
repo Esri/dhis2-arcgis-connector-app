@@ -1,57 +1,110 @@
-import { useDataQuery } from "@dhis2/app-runtime";
+// React
+import React, { useEffect } from "react";
+
+// React Router
+import {
+  HashRouter,
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
+
+// DHIS2
 import i18n from "@dhis2/d2-i18n";
-import React from "react";
-import classes from "./App.module.css";
-import { setAssetPath } from "@esri/calcite-components/dist/components";
+import { useDataQuery } from "@dhis2/app-runtime";
 
 // Calcite components
+import "@esri/calcite-components/dist/components/calcite-action.js";
 import "@esri/calcite-components/dist/components/calcite-button.js";
 import "@esri/calcite-components/dist/components/calcite-icon.js";
 import "@esri/calcite-components/dist/components/calcite-slider.js";
 import "@esri/calcite-components/dist/components/calcite-shell.js";
-
+import "@esri/calcite-components/dist/components/calcite-shell-panel.js";
+import "@esri/calcite-components/dist/components/calcite-panel.js";
+import "@esri/calcite-components/dist/components/calcite-navigation.js";
+import "@esri/calcite-components/dist/components/calcite-navigation-logo.js";
+import "@esri/calcite-components/dist/components/calcite-menu.js";
+import "@esri/calcite-components/dist/components/calcite-menu-item.js";
+import "@esri/calcite-components/dist/components/calcite-navigation-user.js";
+import "@esri/calcite-components/dist/components/calcite-popover.js";
+import "@esri/calcite-components/dist/components/calcite-link.js";
 import "@esri/calcite-components/dist/calcite/calcite.css";
-import {
-  CalciteButton,
-  CalciteIcon,
-  CalciteShell,
-  CalciteSlider,
-} from "@esri/calcite-components-react";
 
-// Local assets
-setAssetPath(window.location.href);
+// Components
+import ShellContainer from "./components/ShellContainer";
+import Header from "./components/Header";
 
-const query = {
-  me: {
-    resource: "me",
-  },
-};
+// Pages
+import LandingPage from "./pages/LandingPage";
+import ManageConnections from "./pages/ManageConnections";
+import NewConnection from "./pages/NewConnection";
 
-const MyApp = () => {
-  const { error, loading, data } = useDataQuery(query);
+// Set Calcite assets path
+import { setAssetPath } from "@esri/calcite-components/dist/components";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import SubHeader from "./components/SubHeader";
+import Settings from "./pages/Settings";
+setAssetPath("https://unpkg.com/@esri/calcite-components/dist/calcite/assets");
+// Local assets -- Does not work when deploying!
+// setAssetPath(window.location.href);
 
-  if (error) {
-    return <span>{i18n.t("ERROR")}</span>;
-  }
+// const query = {
+//   me: {
+//     resource: "me",
+//   },
+// };
+
+const clientId = process.env.DHIS2_ARCGIS_CLIENT_ID;
+const portalUrl = process.env.DHIS2_ARCGIS_PORTAL_URL;
+
+console.log(clientId, portalUrl);
+// Create a separate component for the app content
+const AppContent = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading) {
+      if (user) {
+        navigate("/connections", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    }
+  }, [user, loading]);
 
   if (loading) {
-    return <span>{i18n.t("Loading...")}</span>;
+    return null;
   }
 
   return (
-    <CalciteShell>
-      <div slot="header" style={{ height: "75px", border: "1px solid red" }}>
-        app Header goes here
-      </div>
-      {/* <div className={classes.container}>
-        <h1>{i18n.t("Hello {{name}}", { name: data.me.name })}</h1>
-        <h3>{i18n.t("Welcome to DHIS2!")}</h3>
-        <CalciteButton appearance="solid" color="blue" scale="m">
-          <CalciteIcon icon="plus" scale="s" />
-          {i18n.t("Add something")}
-        </CalciteButton>
-      </div> */}
-    </CalciteShell>
+    <ShellContainer>
+      <Header />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route
+          path="/connections"
+          element={user ? <ManageConnections /> : <Navigate to="/" replace />}
+        />
+        <Route
+          path="/add-connection"
+          element={user ? <NewConnection /> : <Navigate to="/" replace />}
+        />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </ShellContainer>
+  );
+};
+
+// Main App component
+const MyApp = () => {
+  return (
+    <HashRouter>
+      <AuthProvider clientId={clientId} portalUrl={portalUrl}>
+        <AppContent />
+      </AuthProvider>
+    </HashRouter>
   );
 };
 

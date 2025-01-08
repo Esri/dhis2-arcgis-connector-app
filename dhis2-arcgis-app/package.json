@@ -14,7 +14,10 @@
     "@dhis2/cli-app-scripts": "^12.0.0"
   },
   "dependencies": {
+    "@arcgis/core": "^4.31.6",
     "@dhis2/app-runtime": "^3.12.0",
-    "@esri/calcite-components-react": "^2.13.2"
+    "@esri/calcite-components-react": "^2.13.2",
+    "react-router-dom": "^7.1.1",
+    "styled-components": "^6.1.14"
   }
 }
