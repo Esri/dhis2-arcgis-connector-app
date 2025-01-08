@@ -28,8 +28,16 @@ const LandingPage = () => {
 
   return (
     <StyledLandingPage>
-      <div className="rectangle1"></div>
-      <div className="dhis2-to-arcgis-connector-app">
+      <div
+        style={{
+          // Welcome to the <br/>DHIS2 to ArcGIS Connector
+          color: "black",
+          fontSize: 64,
+          fontFamily: "Inter",
+          fontWeight: "400",
+          wordWrap: "break-word",
+        }}
+      >
         DHIS2 to ArcGIS Connector App
       </div>
       <div className="rectangle2"></div>
