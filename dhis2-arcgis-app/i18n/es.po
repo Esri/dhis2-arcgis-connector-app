@@ -9,88 +9,88 @@ msgstr ""
 "PO-Revision-Date: 2025-01-09T16:47:13.303Z\n"
 
 msgid "My Content"
-msgstr "My Content"
+msgstr "Mi Contenido"
 
 msgid "Sign Out"
-msgstr "Sign Out"
+msgstr "Cerrar Sesión"
 
 msgid "DHIS2 to ArcGIS Connector"
-msgstr "DHIS2 to ArcGIS Connector"
+msgstr "Conector DHIS2 a ArcGIS"
 
 msgid "Home"
-msgstr "Home"
+msgstr "Inicio"
 
 msgid "User Guide"
-msgstr "User Guide"
+msgstr "Guía de Usuario"
 
 msgid "Provide Feedback"
-msgstr "Provide Feedback"
+msgstr "Proporcionar Comentarios"
 
 msgid "Configure"
-msgstr "Configure"
+msgstr "Configurar"
 
 msgid "Sign In"
-msgstr "Sign In"
+msgstr "Iniciar Sesión"
 
 msgid "Manage Connections"
-msgstr "Manage Connections"
+msgstr "Administrar Conexiones"
 
 msgid "Create New Connection"
-msgstr "Create New Connection"
+msgstr "Crear Nueva Conexión"
 
 msgid "Koop URL is invalid"
-msgstr "Koop URL is invalid"
+msgstr "La URL de Koop no es válida"
 
 msgid "Your Koop URL is invalid. Please make sure it is accessible."
-msgstr "Your Koop URL is invalid. Please make sure it is accessible."
+msgstr "Su URL de Koop no es válida. Por favor, asegúrese de que sea accesible."
 
 msgid "Settings updated"
-msgstr "Settings updated"
+msgstr "Configuración actualizada"
 
 msgid "Your ArcGIS configuration has been updated. Please sign in again."
-msgstr "Your ArcGIS configuration has been updated. Please sign in again."
+msgstr "Su configuración de ArcGIS ha sido actualizada. Por favor, inicie sesión nuevamente."
 
 msgid "Redirect URL"
-msgstr "Redirect URL"
+msgstr "URL de Redirección"
 
 msgid "ArcGIS Configuration"
-msgstr "ArcGIS Configuration"
+msgstr "Configuración de ArcGIS"
 
 msgid "Client ID"
-msgstr "Client ID"
+msgstr "ID de Cliente"
 
 msgid "Portal URL"
-msgstr "Portal URL"
+msgstr "URL del Portal"
 
 msgid "Koop URL"
-msgstr "Koop URL"
+msgstr "URL de Koop"
 
 msgid "Save Configuration"
-msgstr "Save Configuration"
+msgstr "Guardar Configuración"
 
 msgid "Welcome to the"
-msgstr "Welcome to the"
+msgstr "Bienvenido al"
 
 msgid "DHIS2 to ArcGIS Connector App"
-msgstr "DHIS2 to ArcGIS Connector App"
+msgstr "Aplicación Conector DHIS2 a ArcGIS"
 
 msgid "Integrate your DHIS2 data into your ArcGIS Online or ArcGIS Enterprise"
-msgstr "Integrate your DHIS2 data into your ArcGIS Online or ArcGIS Enterprise"
+msgstr "Integre sus datos DHIS2 en su ArcGIS Online o ArcGIS Enterprise"
 
 msgid "organization to enable seamless data sharing, analysis, and visualization."
-msgstr "organization to enable seamless data sharing, analysis, and visualization."
+msgstr "organización para permitir un intercambio, análisis y visualización de datos sin problemas."
 
 msgid "To get started, you will need to configure the connection between your"
-msgstr "To get started, you will need to configure the connection between your"
+msgstr "Para comenzar, necesitará configurar la conexión entre su"
 
 msgid "ArcGIS and DHIS2 instance through a few short steps."
-msgstr "ArcGIS and DHIS2 instance through a few short steps."
+msgstr "instancia de ArcGIS y DHIS2 a través de unos breves pasos."
 
 msgid "Sign In with ArcGIS Online"
-msgstr "Sign In with ArcGIS Online"
+msgstr "Iniciar Sesión con ArcGIS Online"
 
 msgid "Sign In with ArcGIS Enterprise"
-msgstr "Sign In with ArcGIS Enterprise"
+msgstr "Iniciar Sesión con ArcGIS Enterprise"
 
 msgid "Not sure? View the documentation here."
-msgstr "Not sure? View the documentation here."
+msgstr "¿No está seguro? Vea la documentación aquí."

@@ -56,13 +56,15 @@ import Configure from "./pages/Configure";
 // Set Calcite assets path
 import { setAssetPath } from "@esri/calcite-components/dist/components";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import SubHeader from "./components/SubHeader";
 import { CalciteShell } from "@esri/calcite-components-react";
 import { AlertProvider } from "./hooks/useAppAlert";
 import {
   SystemSettingsProvider,
   useSystemSettings,
 } from "./contexts/SystemSettingsContext";
+
+// import the locales initialization to recognize the user's locale
+import "./locales/index.js";
 
 setAssetPath("https://unpkg.com/@esri/calcite-components/dist/calcite/assets");
 // Local assets -- Does not work when deploying!
