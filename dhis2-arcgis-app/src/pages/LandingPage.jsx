@@ -11,13 +11,49 @@ import { useAuth } from "../contexts/AuthContext";
 
 const StyledLandingPage = styled(CalcitePanel)`
   height: 100vh;
-  // padding: 1.5rem;
+  width: 100vw;
+  padding: 1.5rem;
+  align-items: center;
   display: flex;
-  background-color: white !important;
-  --calcite-ui-background: white !important;
-  --calcite-ui-foreground-1: white !important;
-  --calcite-ui-foreground-2: white !important;
-  --calcite-ui-foreground-3: white !important;
+  flex-direction: column;
+`;
+
+const Header = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: black;
+  font-size: 64px;
+  font-weight: 400;
+  word-wrap: break-word;
+`;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: black;
+  font-size: 24px;
+  font-weight: 400;
+  word-wrap: break-word;
+`;
+
+const DocContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: #00619b;
+  font-size: 12px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+`;
+
+const Button = styled(CalciteButton)`
+  margin-right: 2rem;
 `;
 
 const LandingPage = () => {
@@ -36,47 +72,61 @@ const LandingPage = () => {
       <div
         style={{
           backgroundColor: "white",
-          height: "100vh",
-          padding: "1.5rem",
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          // border: "2px solid green",
+          justifyContent: "center",
         }}
       >
-        <div
-          style={{
-            // Welcome to the <br/>DHIS2 to ArcGIS Connector
-            color: "black",
-            fontSize: 64,
-            fontFamily: "Inter",
-            fontWeight: "400",
-            wordWrap: "break-word",
-          }}
-        >
+        <Header>
+          Welcome to the <br />
           DHIS2 to ArcGIS Connector App
-        </div>
-        <CalciteCard className="frame1">
-          <CalciteLabel className="dhis2-to-arcgis-connector">
-            DHIS2 to ArcGIS Connector
+        </Header>
+        <Container>
+          <CalciteLabel>
+            <p>
+              Integrate your DHIS2 data into your ArcGIS Online or ArcGIS
+              Enterprise
+              <br />
+              organization to enable seamless data sharing, analysis, and
+              visualization.
+            </p>
+            <p>
+              To get started, you will need to configure the connection between
+              your
+              <br />
+              ArcGIS and DHIS2 instance through a few short steps.
+            </p>
           </CalciteLabel>
-          <CalciteLabel className="integrate-your-dhis2-data">
-            Integrate your DHIS2 data into your ArcGIS Online or ArcGIS
-            Enterprise organization to enable seamless data sharing, analysis,
-            and visualization.
-          </CalciteLabel>
-          <div className="sign-in-buttons">
-            <CalciteButton className="button" onClick={signIn}>
-              Sign In with ArcGIS Online
-            </CalciteButton>
+        </Container>
+        <CalciteCard>
+          <ButtonContainer>
+            <Button onClick={signIn} scale="l">Sign In with ArcGIS Online</Button>
             <CalciteButton
-              className="button"
               onClick={handleSignInEnterprise}
+              scale="l"
               appearance="outline"
             >
               Sign In with ArcGIS Enterprise
             </CalciteButton>
-          </div>
+          </ButtonContainer>
           <div className="arcgis-online">
             <div className="logo"></div>
           </div>
         </CalciteCard>
+        <DocContainer>
+          <CalciteLabel>
+            <p>
+              <a
+                href="https://www.esri.com/en-us/arcgis/products/arcgis-online/overview"
+                target="_blank"
+              >
+                Not sure? View the documentation here.
+              </a>
+            </p>
+          </CalciteLabel>
+        </DocContainer>
       </div>
     </StyledLandingPage>
   );
