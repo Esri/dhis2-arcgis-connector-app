@@ -77,7 +77,6 @@ const LandingPage = () => {
           display: "flex",
           flexDirection: "column",
           flex: 1,
-          // border: "2px solid green",
           justifyContent: "center",
         }}
       >

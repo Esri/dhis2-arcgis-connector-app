@@ -40,6 +40,9 @@ import "@esri/calcite-components/dist/components/calcite-segmented-control.js";
 import "@esri/calcite-components/dist/components/calcite-segmented-control-item.js";
 import "@esri/calcite-components/dist/components/calcite-alert.js";
 import "@esri/calcite-components/dist/components/calcite-icon.js";
+import "@esri/calcite-components/dist/components/calcite-stepper.js";
+import "@esri/calcite-components/dist/components/calcite-stepper-item.js";
+import "@esri/calcite-components/dist/components/calcite-notice.js";
 
 import "@esri/calcite-components/dist/calcite/calcite.css";
 
