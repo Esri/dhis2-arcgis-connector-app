@@ -17,27 +17,30 @@ import { useAuth } from "../contexts/AuthContext";
 
 const SubHeader = () => {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
-
-  const handleNavigation = (path) => {
-    if (!loading && user) {
-      console.log("Navigating to:", path);
-      navigate(path, { replace: true });
-    }
-  };
 
   return (
-    <CalciteNavigation slot="navigation-secondary" style={{}}>
+    <CalciteNavigation
+      slot="navigation-secondary"
+      style={
+        {
+          // "--calcite-navigation-background": "green",
+        }
+      }
+    >
       <CalciteMenu slot="content-start">
         <CalciteMenuItem
           text="Manage Connections"
           textEnabled
-          onClick={() => handleNavigation("/connections")}
+          onClick={() => navigate("/connections", { replace: true })}
+          active={window.location.hash === "#/connections" ? true : undefined}
         ></CalciteMenuItem>
         <CalciteMenuItem
           text="Create New Connection"
           textEnabled
-          onClick={() => handleNavigation("/add-connection")}
+          onClick={() => navigate("/add-connection", { replace: true })}
+          active={
+            window.location.hash === "#/add-connection" ? true : undefined
+          }
         ></CalciteMenuItem>
       </CalciteMenu>
     </CalciteNavigation>
