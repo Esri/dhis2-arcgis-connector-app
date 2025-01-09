@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import i18n from "@dhis2/d2-i18n";
 
 import {
   CalciteMenu,
@@ -36,20 +37,6 @@ const Header = () => {
       setMyContentLink(`${userInformation.portalUrl}/home/content.html#my`);
     }
   }, [userCredential, userInformation]);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     if (userCredential && settings && settings.arcgisConfig) {
-  //       // if we are logged in and we have settings for arcgis
-  //       // we should go to the connections page
-  //       navigate("/connections", { replace: true });
-  //     } else {
-  //       // if we are not logged in, and we don't have settings,
-  //       // we should go to the settings page
-  //       navigate("/settings", { replace: true });
-  //     }
-  //   }
-  // }, [userCredential, loading, settings]);
 
   return (
     <>
@@ -127,7 +114,7 @@ const Header = () => {
               }}
             >
               <CalciteLink target="_blank" href={myContentLink}>
-                My Content
+                {i18n.t("My Content")}
               </CalciteLink>
             </div>
           </div>
@@ -145,7 +132,7 @@ const Header = () => {
                 navigate("/");
               }}
             >
-              Sign Out
+              {i18n.t("Sign Out")}
             </CalciteButton>
           </div>
         </CalcitePopover>
@@ -155,7 +142,7 @@ const Header = () => {
 
         <CalciteNavigationLogo
           slot="logo"
-          heading="DHIS2 to ArcGIS Connector"
+          heading={i18n.t("DHIS2 to ArcGIS Connector")}
           // onClick={() =>
           //   navigate(userCredential ? "/connections" : "/", { replace: true })
           // }
@@ -169,23 +156,23 @@ const Header = () => {
                   replace: true,
                 })
               }
-              text="Home"
+              text={i18n.t("Home")}
               iconStart="home"
               textEnabled
             ></CalciteMenuItem>
           )}
           <CalciteMenuItem
-            text="User Guide"
+            text={i18n.t("User Guide")}
             iconStart="question"
             textEnabled
           ></CalciteMenuItem>
           <CalciteMenuItem
-            text="Provide Feedback"
+            text={i18n.t("Provide Feedback")}
             iconStart="envelope"
             textEnabled
           ></CalciteMenuItem>
           <CalciteMenuItem
-            text="Configure"
+            text={i18n.t("Configure")}
             iconStart="gear"
             textEnabled
             onClick={() => navigate("/configure", { replace: true })}
@@ -194,7 +181,7 @@ const Header = () => {
 
           {settings?.arcgisConfig && !userCredential && (
             <CalciteMenuItem
-              text="Sign In"
+              text={i18n.t("Sign In")}
               iconStart="user"
               textEnabled
               onClick={signIn}

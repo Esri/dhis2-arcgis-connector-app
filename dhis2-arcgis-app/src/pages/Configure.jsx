@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 
 import styled from "styled-components";
 
+import i18n from "@dhis2/d2-i18n";
+
 import { CalciteButton, CalciteInput } from "@esri/calcite-components-react";
 import { useAppAlert, ALERT_TYPES } from "../hooks/useAppAlert";
 import { useSystemSettings } from "../contexts/SystemSettingsContext";
@@ -49,7 +51,6 @@ const StyledCalciteButtonCopyToClipboard = styled(CalciteButton)`
 `;
 
 const Configure = () => {
-  console.log("configure");
   const { settings, updateSetting, isLoadingSettings } = useSystemSettings();
   const { showAlert } = useAppAlert();
   const { setOAuthConfig, setUserCredential, signOut } = useAuth();
@@ -74,9 +75,10 @@ const Configure = () => {
 
       if (!isKoopUrlValid) {
         showAlert({
-          title: "Koop URL is invalid",
-          message:
-            "Your Koop URL is invalid. Please make sure it is accessible.",
+          title: i18n.t("Koop URL is invalid"),
+          message: i18n.t(
+            "Your Koop URL is invalid. Please make sure it is accessible."
+          ),
           type: ALERT_TYPES.DANGER,
         });
         return;
@@ -109,10 +111,11 @@ const Configure = () => {
     });
 
     showAlert({
-      title: "Settings updated",
+      title: i18n.t("Settings updated"),
       autoClose: false,
-      message:
-        "Your ArcGIS configuration has been updated. Please sign in again.",
+      message: i18n.t(
+        "Your ArcGIS configuration has been updated. Please sign in again."
+      ),
       type: ALERT_TYPES.SUCCESS,
     });
   };
@@ -132,7 +135,7 @@ const Configure = () => {
 
   return (
     <StyledContainer>
-      <StyledPageHeader>Configure</StyledPageHeader>
+      <StyledPageHeader>{i18n.t("Configure")}</StyledPageHeader>
       <StyledDescription>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
@@ -140,7 +143,7 @@ const Configure = () => {
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
       </StyledDescription>
       <StyledCalciteInputText
-        prefixText="Redirect URL"
+        prefixText={i18n.t("Redirect URL")}
         readOnly
         value={window.location.origin}
       >
@@ -159,7 +162,7 @@ const Configure = () => {
       </StyledCalciteInputText>
 
       <StyledInputContainer>
-        <h2>ArcGIS Configuration</h2>
+        <h2>{i18n.t("ArcGIS Configuration")}</h2>
         {/* <CalciteSegmentedControl
           onCalciteSegmentedControlChange={(event) => {
             setPortalType(event.target.value);
@@ -183,7 +186,7 @@ const Configure = () => {
           </CalciteSegmentedControlItem>
         </CalciteSegmentedControl> */}
         <StyledCalciteInputText
-          prefixText="Client ID"
+          prefixText={i18n.t("Client ID")}
           value={clientId}
           onCalciteInputChange={(event) => {
             setClientId(event.target.value);
@@ -191,7 +194,7 @@ const Configure = () => {
         />
         {/* {portalType === "enterprise" && ( */}
         <StyledCalciteInputText
-          prefixText="Portal URL"
+          prefixText={i18n.t("Portal URL")}
           value={portalUrl}
           onCalciteInputInput={(event) => {
             setPortalUrl(event.target.value);
@@ -199,7 +202,7 @@ const Configure = () => {
         />
         {/* )} */}
         <StyledCalciteInputText
-          prefixText="Koop URL"
+          prefixText={i18n.t("Koop URL")}
           value={koopUrl}
           onCalciteInputChange={(event) => {
             setKoopUrl(event.target.value);
@@ -207,7 +210,7 @@ const Configure = () => {
         ></StyledCalciteInputText>
         <div style={{ marginTop: "1rem" }}>
           <CalciteButton iconStart="save" onClick={() => updateSettings()}>
-            Save Configuration
+            {i18n.t("Save Configuration")}
           </CalciteButton>
         </div>
       </StyledInputContainer>

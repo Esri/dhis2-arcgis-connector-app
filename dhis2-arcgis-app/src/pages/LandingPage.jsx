@@ -1,4 +1,6 @@
 import React from "react";
+import i18n from "@dhis2/d2-i18n";
+
 import {
   CalciteButton,
   CalciteCard,
@@ -80,35 +82,40 @@ const LandingPage = () => {
         }}
       >
         <Header>
-          Welcome to the <br />
-          DHIS2 to ArcGIS Connector App
+          {i18n.t("Welcome to the")} <br />
+          {i18n.t("DHIS2 to ArcGIS Connector App")}
         </Header>
         <Container>
           <CalciteLabel>
             <p>
-              Integrate your DHIS2 data into your ArcGIS Online or ArcGIS
-              Enterprise
+              {i18n.t(
+                "Integrate your DHIS2 data into your ArcGIS Online or ArcGIS Enterprise"
+              )}
               <br />
-              organization to enable seamless data sharing, analysis, and
-              visualization.
+              {i18n.t(
+                "organization to enable seamless data sharing, analysis, and visualization."
+              )}
             </p>
             <p>
-              To get started, you will need to configure the connection between
-              your
+              {i18n.t(
+                "To get started, you will need to configure the connection between your"
+              )}
               <br />
-              ArcGIS and DHIS2 instance through a few short steps.
+              {i18n.t("ArcGIS and DHIS2 instance through a few short steps.")}
             </p>
           </CalciteLabel>
         </Container>
         <CalciteCard>
           <ButtonContainer>
-            <Button onClick={signIn} scale="l">Sign In with ArcGIS Online</Button>
+            <Button onClick={signIn} scale="l">
+              {i18n.t("Sign In with ArcGIS Online")}
+            </Button>
             <CalciteButton
               onClick={handleSignInEnterprise}
               scale="l"
               appearance="outline"
             >
-              Sign In with ArcGIS Enterprise
+              {i18n.t("Sign In with ArcGIS Enterprise")}
             </CalciteButton>
           </ButtonContainer>
           <div className="arcgis-online">
@@ -122,7 +129,7 @@ const LandingPage = () => {
                 href="https://www.esri.com/en-us/arcgis/products/arcgis-online/overview"
                 target="_blank"
               >
-                Not sure? View the documentation here.
+                {i18n.t("Not sure? View the documentation here.")}
               </a>
             </p>
           </CalciteLabel>
