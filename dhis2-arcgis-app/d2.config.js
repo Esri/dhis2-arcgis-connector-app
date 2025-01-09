@@ -1,9 +1,9 @@
 const config = {
-    type: 'app',
+  type: "app",
+  dataStoreNamespace: "dhis2-arcgis-app-ns",
+  entryPoints: {
+    app: "./src/App.jsx",
+  },
+};
 
-    entryPoints: {
-        app: './src/App.jsx',
-    },
-}
-
-module.exports = config
+module.exports = config;
