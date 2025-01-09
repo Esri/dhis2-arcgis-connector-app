@@ -1,5 +1,3 @@
-// Brought in existing code to start this off. 
-// TODO: Need to update the code to work for the Create New Connection page.
 // import { useNavigate } from "react-router-dom";
 import { OrganisationUnitTree } from "@dhis2/ui";
 // import exploreStore from "../../store/exploreStore";
