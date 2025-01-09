@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, createRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -6,37 +6,54 @@ import {
   CalciteNavigation,
   CalciteNavigationLogo,
   CalciteMenuItem,
-  CalciteAction,
   CalciteButton,
   CalciteNavigationUser,
   CalcitePopover,
-  CalciteLabel,
   CalciteLink,
 } from "@esri/calcite-components-react";
 import { useAuth } from "../contexts/AuthContext";
+import { useSystemSettings } from "../contexts/SystemSettingsContext";
+
 import SubHeader from "./SubHeader";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { user, signIn, signOut, userInfo } = useAuth();
+  const { userCredential, signIn, signOut, userInformation, isLoadingAuth } =
+    useAuth();
+
+  // console.log(userCredential, userInformation, isLoadingAuth);
+  const { settings } = useSystemSettings();
 
   const [userThumbnail, setUserThumbnail] = useState(null);
   const [myContentLink, setMyContentLink] = useState(null);
-  const [userAvatarPopoverOpen, setUserAvatarPopoverOpen] = useState(false);
 
   useEffect(() => {
-    if (userInfo && user) {
+    if (userInformation && userCredential) {
       // console.log(user, userInfo);
       setUserThumbnail(
-        `${user.server}/sharing/rest/community/users/${user.userId}/info/${userInfo.thumbnail}?token=${user.token}`
+        `${userCredential.server}/sharing/rest/community/users/${userCredential.userId}/info/${userInformation.thumbnail}?token=${userCredential.token}`
       );
-      setMyContentLink(`${userInfo.portalUrl}/home/content.html#my`);
+      setMyContentLink(`${userInformation.portalUrl}/home/content.html#my`);
     }
-  }, [user, userInfo]);
+  }, [userCredential, userInformation]);
+
+  // useEffect(() => {
+  //   if (!loading) {
+  //     if (userCredential && settings && settings.arcgisConfig) {
+  //       // if we are logged in and we have settings for arcgis
+  //       // we should go to the connections page
+  //       navigate("/connections", { replace: true });
+  //     } else {
+  //       // if we are not logged in, and we don't have settings,
+  //       // we should go to the settings page
+  //       navigate("/settings", { replace: true });
+  //     }
+  //   }
+  // }, [userCredential, loading, settings]);
 
   return (
     <>
-      {user && userInfo && (
+      {userCredential && userInformation && (
         <CalcitePopover
           referenceElement="user-avatar-popover"
           pointerDisabled
@@ -85,7 +102,7 @@ const Header = () => {
                   wordWrap: "break-word",
                 }}
               >
-                {userInfo.fullName}
+                {userInformation.fullName}
               </span>
               <span
                 style={{
@@ -96,7 +113,7 @@ const Header = () => {
                   color: "#595959",
                 }}
               >
-                {userInfo.username}
+                {userInformation.username}
               </span>
             </div>
 
@@ -134,20 +151,29 @@ const Header = () => {
         </CalcitePopover>
       )}
       <CalciteNavigation slot="header">
-        {user && <SubHeader />}
+        {userCredential && <SubHeader />}
 
         <CalciteNavigationLogo
           slot="logo"
           heading="DHIS2 to ArcGIS Connector"
-          onClick={() => navigate("/")}
+          // onClick={() =>
+          //   navigate(userCredential ? "/connections" : "/", { replace: true })
+          // }
+          active={window.location.hash === "#/" ? true : undefined}
         ></CalciteNavigationLogo>
         <CalciteMenu slot="content-end">
-          <CalciteMenuItem
-            text="Home"
-            iconStart="home"
-            textEnabled
-            onClick={() => navigate("/")}
-          ></CalciteMenuItem>
+          {userCredential && (
+            <CalciteMenuItem
+              onClick={() =>
+                navigate(userCredential ? "/connections" : "/", {
+                  replace: true,
+                })
+              }
+              text="Home"
+              iconStart="home"
+              textEnabled
+            ></CalciteMenuItem>
+          )}
           <CalciteMenuItem
             text="User Guide"
             iconStart="question"
@@ -159,13 +185,14 @@ const Header = () => {
             textEnabled
           ></CalciteMenuItem>
           <CalciteMenuItem
-            text="Settings"
+            text="Configure"
             iconStart="gear"
             textEnabled
-            onClick={() => navigate("/settings")}
+            onClick={() => navigate("/configure", { replace: true })}
+            active={window.location.hash === "#/configure" ? true : undefined}
           ></CalciteMenuItem>
 
-          {!user && (
+          {settings?.arcgisConfig && !userCredential && (
             <CalciteMenuItem
               text="Sign In"
               iconStart="user"
@@ -174,14 +201,14 @@ const Header = () => {
             ></CalciteMenuItem>
           )}
         </CalciteMenu>
-        {user && userInfo && (
+        {userCredential && userInformation && (
           <>
             <CalciteNavigationUser
               id="user-avatar-popover"
               // ref={userRef}
               slot="user"
-              fullName={userInfo.fullName}
-              username={userInfo.username}
+              fullName={userInformation.fullName}
+              username={userInformation.username}
               // thumbnail={`${user.server}/sharing/rest/community/users/${user.userId}/info/${userInfo.thumbnail}?token=${user.token}`}
               thumbnail={userThumbnail}
             ></CalciteNavigationUser>
