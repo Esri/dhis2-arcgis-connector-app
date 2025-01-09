@@ -4,7 +4,17 @@ import { useNavigate } from "react-router-dom";
 import { OrganisationUnitTree } from "@dhis2/ui";
 import exploreStore from "../../store/exploreStore";
 import useOrgUnitRoots from "../../hooks/useOrgUnitRoots";
-import styles from "./styles/OrgUnitTree.module.css";
+
+const styles = {
+  container: {
+    overflow: 'hidden',
+  },
+  orgUnitTree: {
+    overflowY: 'auto',
+    paddingLeft: '10px',
+    paddingBottom: '10px',
+  },
+};
 
 const OrgUnitTree = () => {
   const { orgUnit } = exploreStore();
@@ -12,6 +22,7 @@ const OrgUnitTree = () => {
   const navigate = useNavigate();
   const path = orgUnit?.path.split("/");
 
+  // TODO: Sort out where/why initiallyExpanded ought be used
   const initiallyExpanded =
     path?.length > 2
       ? [path.slice(0, -1).join("/")]
@@ -22,14 +33,13 @@ const OrgUnitTree = () => {
   const onChange = (orgUnit) => navigate(`/explore/${orgUnit.id}`);
 
   return roots ? (
-    <div className={styles.container}>
-      <div className={styles.orgUnitTree}>
+    <div style={styles.container}>
+      <div style={styles.orgUnitTree}>
         <OrganisationUnitTree
           roots={roots.map((r) => r.id)}
           selected={selected}
           onChange={onChange}
           singleSelection={true}
-          initiallyExpanded={initiallyExpanded}
         />
       </div>
     </div>
