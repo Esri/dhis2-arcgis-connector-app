@@ -4,9 +4,11 @@ import {
   CalciteButton,
   CalciteCard,
   CalciteLabel,
+  CalcitePanel,
   CalciteStepper,
   CalciteStepperItem,
   CalciteNotice,
+  CalciteFilter,
 } from "@esri/calcite-components-react";
 
 // Move some styling up here similar to LandingPage?
@@ -21,44 +23,39 @@ const NewConnection = () => {
         heading="Organisation units">
           <CalciteNotice width="full" open>
             <div slot="title">
-            <OrgUnitTree />
+              <CalciteFilter placeholder="Search by name"></CalciteFilter>
+              <OrgUnitTree />
               <p>Step 1 Content</p>
+              <CalciteButton 
+              appearance="outline" 
+              color="#00619b">Back</CalciteButton>
+              <CalciteButton 
+              appearance="outline" 
+              display="flex"
+              justify-content="right"
+              color="#00619b">Back</CalciteButton>
             </div>
           </CalciteNotice>
         </CalciteStepperItem>
         <CalciteStepperItem 
         numbered={true}
-        heading="Period">
-        <CalciteNotice width="full" open>
+        heading="Data">
+          <CalciteNotice width="full" open>
             <div slot="title">Step 2 Content</div>
           </CalciteNotice>
         </CalciteStepperItem>
         <CalciteStepperItem 
         numbered={true}
-        heading="Events">
+        heading="Filter">
           <CalciteNotice width="full" open>
             <div slot="title">Step 3 Content</div>
           </CalciteNotice>
         </CalciteStepperItem>
         <CalciteStepperItem 
         numbered={true}
-        heading="Aggregation">
-          <CalciteNotice width="full" open>
-            <div slot="title">Step 4 Content</div>
-          </CalciteNotice>
-        </CalciteStepperItem>
-        <CalciteStepperItem 
-        numbered={true}
-        heading="Instance Selection">
-          <CalciteNotice width="full" open>
-            <div slot="title">Step 5 Content</div>
-          </CalciteNotice>
-        </CalciteStepperItem>
-        <CalciteStepperItem 
-        numbered={true}
         heading="Summary">
           <CalciteNotice width="full" open>
-            <div slot="title">Step 6 Content</div>
+            <div slot="title">Step 4 Content</div>
           </CalciteNotice>
         </CalciteStepperItem>
       </CalciteStepper>

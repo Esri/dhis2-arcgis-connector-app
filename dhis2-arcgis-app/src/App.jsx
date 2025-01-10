@@ -43,6 +43,7 @@ import "@esri/calcite-components/dist/components/calcite-icon.js";
 import "@esri/calcite-components/dist/components/calcite-stepper.js";
 import "@esri/calcite-components/dist/components/calcite-stepper-item.js";
 import "@esri/calcite-components/dist/components/calcite-notice.js";
+import "@esri/calcite-components/dist/components/calcite-filter.js";
 
 import "@esri/calcite-components/dist/calcite/calcite.css";
 
