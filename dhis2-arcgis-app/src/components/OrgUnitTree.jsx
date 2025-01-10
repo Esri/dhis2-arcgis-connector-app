@@ -6,16 +6,16 @@ import { useState } from "react";
 
 const styles = {
   container: {
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   orgUnitTree: {
-    overflowY: 'auto',
-    paddingLeft: '10px',
-    paddingBottom: '10px',
+    overflowY: "auto",
+    paddingLeft: "10px",
+    paddingBottom: "10px",
   },
 };
 
-const OrgUnitTree = () => {
+const OrgUnitTree = ({ onChange }) => {
   // const { orgUnit } = exploreStore();
   const { roots } = useOrgUnitRoots();
   // const navigate = useNavigate();
@@ -30,9 +30,10 @@ const OrgUnitTree = () => {
   // const selected = orgUnit?.path ? [orgUnit.path] : [];
 
   // TODO: Change this to fit our application (map through them and grab id's)
-  const onChange = (orgUnit) => {
+  const handleOnChange = (orgUnit) => {
     console.log(orgUnit);
     setSelectedRoots(orgUnit.selected);
+    onChange(orgUnit.selected);
   };
 
   const [selectedRoots, setSelectedRoots] = useState([]);

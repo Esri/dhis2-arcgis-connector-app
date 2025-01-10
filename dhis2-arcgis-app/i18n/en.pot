@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-01-09T16:47:13.303Z\n"
-"PO-Revision-Date: 2025-01-09T16:47:13.303Z\n"
+"POT-Creation-Date: 2025-01-10T04:16:41.519Z\n"
+"PO-Revision-Date: 2025-01-10T04:16:41.520Z\n"
 
 msgid "My Content"
 msgstr "My Content"
@@ -94,3 +94,6 @@ msgstr "Sign In with ArcGIS Enterprise"
 
 msgid "Not sure? View the documentation here."
 msgstr "Not sure? View the documentation here."
+
+msgid "Data"
+msgstr "Data"
