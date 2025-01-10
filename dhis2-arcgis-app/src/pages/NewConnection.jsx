@@ -21,18 +21,29 @@ import {
 import OrgUnitDimensionWrapper from "../components/OrgUnitDimensionWrapper";
 
 const NewConnection = () => {
+  const [currentStep, setCurrentStep] = useState(0);
   const [selectedOrgUnits, setSelectedOrgUnits] = useState([]);
   const [selectedDimensions, setSelectedDimensions] = useState([]);
   const [selectedPeriods, setSelectedPeriods] = useState([]);
 
+  const handleNext = () => {
+    setCurrentStep((previousStep) => Math.min(previousStep + 1, 3));
+  };
+
+  const handleBack = () => {
+    setCurrentStep((previousStep) => Math.max(previousStep - 1, 0));
+  };
+
+// TODO: Add stepper logic below
+
   return (
     <div style={{ padding: "1rem", height: "100vh" }}>
-      <CalciteStepper>
-        <CalciteStepperItem numbered={true} heading="Organisation units">
+      <CalciteStepper activeStep={currentStep}>
+        <CalciteStepperItem numbered={true} heading="Organisation units" active={currentStep === 0}>
           {/* <OrgUnitTree onChange={setSelectedOrgUnits} /> */}
           <OrgUnitDimensionWrapper onChange={setSelectedOrgUnits} />
         </CalciteStepperItem>
-        <CalciteStepperItem numbered={true} heading={i18n.t("Data")}>
+        <CalciteStepperItem numbered={true} heading={i18n.t("Data")} active={currentStep === 1}>
           {/* <InfiniteScrollTransfer /> */}
           <div
             style={{
@@ -53,7 +64,7 @@ const NewConnection = () => {
             />
           </div>
         </CalciteStepperItem>
-        <CalciteStepperItem numbered={true} heading="Filter by Time">
+        <CalciteStepperItem numbered={true} heading="Filter by Time" active={currentStep === 2}>
           <div
             style={{
               display: "flex",
@@ -72,17 +83,7 @@ const NewConnection = () => {
             />
           </div>
         </CalciteStepperItem>
-        {/* <CalciteStepperItem numbered={true} heading="Aggregation">
-          <CalciteNotice width="full" open>
-            <div slot="title">Step 4 Content</div>
-          </CalciteNotice>
-        </CalciteStepperItem>
-        <CalciteStepperItem numbered={true} heading="Instance Selection">
-          <CalciteNotice width="full" open>
-            <div slot="title">Step 5 Content</div>
-          </CalciteNotice>
-        </CalciteStepperItem> */}
-        <CalciteStepperItem numbered={true} heading="Summary">
+        <CalciteStepperItem numbered={true} heading="Summary" active={currentStep === 3}>
           <CalciteNotice width="full" open>
             <div slot="title">Summary Content</div>
           </CalciteNotice>
@@ -93,14 +94,20 @@ const NewConnection = () => {
         <p>Selected Dimensions: {JSON.stringify(selectedDimensions)}</p>
         <p>Selected Periods: {JSON.stringify(selectedPeriods)}</p>
       </div>
-      <div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
         <CalciteButton
         appearance="outline"
         scale="l"
-        gap="1rem">Back</CalciteButton>
+        onClick={handleBack}
+        // disable could be useful in controlling for min req's met each step before advancing.
+        // disabled={currentStep === 0}
+        >Back</CalciteButton>
         <CalciteButton
         appearance="solid"
-        scale="l">Next</CalciteButton>
+        scale="l"
+        onClick={handleNext}
+        // disabled={currentStep === 3}
+        >Next</CalciteButton>
       </div>
     </div>
   );
