@@ -10,6 +10,7 @@ import {
   CalciteStepper,
   CalciteStepperItem,
   CalciteNotice,
+  CalciteInput,
 } from "@esri/calcite-components-react";
 
 import {
@@ -25,6 +26,7 @@ const NewConnection = () => {
   const [selectedOrgUnits, setSelectedOrgUnits] = useState([]);
   const [selectedDimensions, setSelectedDimensions] = useState([]);
   const [selectedPeriods, setSelectedPeriods] = useState([]);
+  const [formData, setFormData] = useState({ name: '', description: '' });
 
   const handleNext = () => {
     setCurrentStep((previousStep) => Math.min(previousStep + 1, 3));
@@ -34,6 +36,10 @@ const NewConnection = () => {
     setCurrentStep((previousStep) => Math.max(previousStep - 1, 0));
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
 // TODO: Add stepper logic below
 
   return (
@@ -83,10 +89,24 @@ const NewConnection = () => {
             />
           </div>
         </CalciteStepperItem>
-        <CalciteStepperItem numbered={true} heading="Summary" active={currentStep === 3}>
+        <CalciteStepperItem numbered={true} heading="Publish" active={currentStep === 3}>
           <CalciteNotice width="full" open>
-            <div slot="title">Summary Content</div>
+            <div slot="title">Publish Content</div>
           </CalciteNotice>
+          <form className="publish-form">
+            <CalciteLabel>Title</CalciteLabel>
+            <CalciteInput
+              name="name"
+              value={formData.name}
+              onInput={handleInputChange}
+              />
+            <CalciteLabel>Description</CalciteLabel>
+            <CalciteInput 
+            name="description"
+            value={formData.description}
+            onInput={handleInputChange}
+            />
+          </form>
         </CalciteStepperItem>
       </CalciteStepper>
       <div>
@@ -106,7 +126,8 @@ const NewConnection = () => {
         appearance="solid"
         scale="l"
         onClick={handleNext}
-        // disabled={currentStep === 3}
+        // disabled={currentStep === 3} 
+        // OU & Periods are required, Dimensions are optional.
         >Next</CalciteButton>
       </div>
     </div>
