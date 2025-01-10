@@ -84,7 +84,7 @@ const NewConnection = () => {
         </CalciteStepperItem> */}
         <CalciteStepperItem numbered={true} heading="Summary">
           <CalciteNotice width="full" open>
-            <div slot="title">Step 6 Content</div>
+            <div slot="title">Summary Content</div>
           </CalciteNotice>
         </CalciteStepperItem>
       </CalciteStepper>
@@ -92,6 +92,15 @@ const NewConnection = () => {
         <p>Selected Org Units: {JSON.stringify(selectedOrgUnits)}</p>
         <p>Selected Dimensions: {JSON.stringify(selectedDimensions)}</p>
         <p>Selected Periods: {JSON.stringify(selectedPeriods)}</p>
+      </div>
+      <div>
+        <CalciteButton
+        appearance="outline"
+        scale="l"
+        gap="1rem">Back</CalciteButton>
+        <CalciteButton
+        appearance="solid"
+        scale="l">Next</CalciteButton>
       </div>
     </div>
   );
