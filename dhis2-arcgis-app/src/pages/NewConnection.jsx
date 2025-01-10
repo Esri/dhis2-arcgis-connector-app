@@ -23,17 +23,19 @@ const NewConnection = () => {
         heading="Organisation units">
           <CalciteNotice width="full" open>
             <div slot="title">
-              <CalciteFilter placeholder="Search by name"></CalciteFilter>
+              <CalciteFilter 
+              placeholder="Search by name"
+              scale="m"></CalciteFilter>
               <OrgUnitTree />
               <p>Step 1 Content</p>
               <CalciteButton 
               appearance="outline" 
               color="#00619b">Back</CalciteButton>
               <CalciteButton 
-              appearance="outline" 
+              appearance="solid" 
               display="flex"
               justify-content="right"
-              color="#00619b">Back</CalciteButton>
+              color="#00619b">Next</CalciteButton>
             </div>
           </CalciteNotice>
         </CalciteStepperItem>
