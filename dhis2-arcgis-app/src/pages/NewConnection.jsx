@@ -98,6 +98,7 @@ const NewConnection = () => {
             <CalciteInput
               name="name"
               value={formData.name}
+              placeholder="Please name your ArcGIS Item"
               onInput={handleInputChange}
               />
             <CalciteLabel>Description</CalciteLabel>
