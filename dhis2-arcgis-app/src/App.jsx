@@ -52,7 +52,7 @@ import Header from "./components/Header";
 
 // Pages
 import LandingPage from "./pages/LandingPage";
-import ManageConnections from "./pages/ManageConnections";
+import Connections from "./pages/Connections";
 import NewConnection from "./pages/NewConnection";
 import Configure from "./pages/Configure";
 
@@ -138,11 +138,7 @@ const AppContent = () => {
           <Route
             path="/connections"
             element={
-              userCredential ? (
-                <ManageConnections />
-              ) : (
-                <Navigate to="/" replace />
-              )
+              userCredential ? <Connections /> : <Navigate to="/" replace />
             }
           />
           <Route
