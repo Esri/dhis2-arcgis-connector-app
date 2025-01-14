@@ -30,10 +30,15 @@ const Header = () => {
 
   useEffect(() => {
     if (userInformation && userCredential) {
-      // console.log(user, userInfo);
-      setUserThumbnail(
-        `${userCredential.server}/sharing/rest/community/users/${userCredential.userId}/info/${userInformation.thumbnail}?token=${userCredential.token}`
-      );
+      if (userInformation.thumbnail) {
+        setUserThumbnail(
+          `${userCredential.server}/sharing/rest/community/users/${userCredential.userId}/info/${userInformation.thumbnail}?token=${userCredential.token}`
+        );
+      } else {
+        const noThumbUrl = `${userCredential.server}/home/11.4.0/js/arcgisonline/css/images/no-user-thumb.jpg`;
+        setUserThumbnail(noThumbUrl);
+      }
+
       setMyContentLink(`${userInformation.portalUrl}/home/content.html#my`);
     }
   }, [userCredential, userInformation]);
@@ -109,12 +114,19 @@ const Header = () => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "flex-start",
-                alignItems: "center",
+                gap: "1rem",
                 marginLeft: "1rem",
+                marginTop: "1rem",
               }}
             >
               <CalciteLink target="_blank" href={myContentLink}>
                 {i18n.t("My Content")}
+              </CalciteLink>
+              <CalciteLink target="_blank" href={myContentLink}>
+                {i18n.t("Provide Feedback")}
+              </CalciteLink>
+              <CalciteLink target="_blank" href={myContentLink}>
+                {i18n.t("User Guide")}
               </CalciteLink>
             </div>
           </div>
@@ -138,7 +150,7 @@ const Header = () => {
         </CalcitePopover>
       )}
       <CalciteNavigation slot="header">
-        {userCredential && <SubHeader />}
+        {/* {userCredential && <SubHeader />} */}
 
         <CalciteNavigationLogo
           slot="logo"
@@ -156,12 +168,15 @@ const Header = () => {
                   replace: true,
                 })
               }
-              text={i18n.t("Home")}
-              iconStart="home"
+              text={i18n.t("Connections")}
+              iconStart="list"
               textEnabled
+              active={
+                window.location.hash === "#/connections" ? true : undefined
+              }
             ></CalciteMenuItem>
           )}
-          <CalciteMenuItem
+          {/* <CalciteMenuItem
             text={i18n.t("User Guide")}
             iconStart="question"
             textEnabled
@@ -170,7 +185,8 @@ const Header = () => {
             text={i18n.t("Provide Feedback")}
             iconStart="envelope"
             textEnabled
-          ></CalciteMenuItem>
+          ></CalciteMenuItem> */}
+
           <CalciteMenuItem
             text={i18n.t("Configure")}
             iconStart="gear"
