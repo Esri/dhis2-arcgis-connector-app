@@ -1,8 +1,11 @@
+.DS_Store
+
 # DHIS2 Platform
 node_modules
 .d2
 src/locales
 build
+public/assets/*
 
 .env
 .env.local

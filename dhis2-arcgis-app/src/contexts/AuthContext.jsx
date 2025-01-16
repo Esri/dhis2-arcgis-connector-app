@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 // import { OAuthInfo, IdentityManager } from "@arcgis/core/identity";
 import esriId from "@arcgis/core/identity/IdentityManager.js";
 import OAuthInfo from "@arcgis/core/identity/OAuthInfo.js";
+import { getPortalHostingServer, getUserInfo } from "../util/portal";
 
 const AuthContext = createContext();
 
@@ -13,6 +14,7 @@ export function AuthProvider({ children }) {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [error, setError] = useState(null);
   const [oAuthConfig, setOAuthConfig] = useState(null);
+  const [hostingServerProperties, setHostingServerProperties] = useState(null);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -30,17 +32,31 @@ export function AuthProvider({ children }) {
           );
           setUserCredential(credential);
 
-          const userInfoUrl = `${oAuthInfo.portalUrl}/sharing/rest/community/users/${credential.userId}?f=json&token=${credential.token}`;
-          const userInfoResponse = await fetch(userInfoUrl);
-          const userInfo = await userInfoResponse.json();
+          const userInfo = await getUserInfo(
+            oAuthInfo.portalUrl,
+            credential.userId,
+            credential.token
+          );
+
+          // console.log(userInfo);
+
           userInfo.portalUrl = oAuthInfo.portalUrl;
           setUserInformation(userInfo);
-        } catch {
+
+          // https://dhis2enterprise.esrigcazure.com/portal/sharing/rest/portals/self/servers?
+          const hostingServer = await getPortalHostingServer(
+            oAuthInfo.portalUrl,
+            credential.token
+          );
+          setHostingServerProperties(hostingServer);
+        } catch (err) {
           // User is not signed in
+          console.error("Error getting credentials", err);
           setUserCredential(null);
           setUserInformation(null);
         }
       } catch (err) {
+        console.error("Error initializing auth", err);
         setError(err);
       } finally {
         setIsLoadingAuth(false);
@@ -80,6 +96,7 @@ export function AuthProvider({ children }) {
     userInformation,
     oAuthConfig,
     setOAuthConfig,
+    hostingServerProperties,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
