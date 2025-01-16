@@ -61,14 +61,6 @@ const Button = styled(CalciteButton)`
 const LandingPage = () => {
   const { signIn } = useAuth();
 
-  const handleSignInOnline = () => {
-    console.log("Online");
-  };
-
-  const handleSignInEnterprise = () => {
-    // history.push("/signin-enterprise"); // Redirect to the ArcGIS Enterprise sign in page
-  };
-
   return (
     <StyledLandingPage>
       <div
@@ -106,20 +98,13 @@ const LandingPage = () => {
         </Container>
         <CalciteCard>
           <ButtonContainer>
-            <Button onClick={signIn} scale="l">
+            {/* <Button onClick={signIn} scale="l">
               {i18n.t("Sign In with ArcGIS Online")}
-            </Button>
-            <CalciteButton
-              onClick={handleSignInEnterprise}
-              scale="l"
-              appearance="outline"
-            >
+            </Button> */}
+            <CalciteButton iconStart="arcgis-online" onClick={signIn} scale="l">
               {i18n.t("Sign In with ArcGIS Enterprise")}
             </CalciteButton>
           </ButtonContainer>
-          <div className="arcgis-online">
-            <div className="logo"></div>
-          </div>
         </CalciteCard>
         <DocContainer>
           <CalciteLabel>

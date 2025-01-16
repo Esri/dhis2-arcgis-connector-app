@@ -5,11 +5,17 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-01-10T04:16:41.519Z\n"
-"PO-Revision-Date: 2025-01-10T04:16:41.520Z\n"
+"POT-Creation-Date: 2025-01-16T22:49:08.113Z\n"
+"PO-Revision-Date: 2025-01-16T22:49:08.114Z\n"
 
 msgid "My Content"
 msgstr "My Content"
+
+msgid "Provide Feedback"
+msgstr "Provide Feedback"
+
+msgid "User Guide"
+msgstr "User Guide"
 
 msgid "Sign Out"
 msgstr "Sign Out"
@@ -17,14 +23,8 @@ msgstr "Sign Out"
 msgid "DHIS2 to ArcGIS Connector"
 msgstr "DHIS2 to ArcGIS Connector"
 
-msgid "Home"
-msgstr "Home"
-
-msgid "User Guide"
-msgstr "User Guide"
-
-msgid "Provide Feedback"
-msgstr "Provide Feedback"
+msgid "Connections"
+msgstr "Connections"
 
 msgid "Configure"
 msgstr "Configure"
@@ -37,12 +37,6 @@ msgstr "Manage Connections"
 
 msgid "Create New Connection"
 msgstr "Create New Connection"
-
-msgid "Koop URL is invalid"
-msgstr "Koop URL is invalid"
-
-msgid "Your Koop URL is invalid. Please make sure it is accessible."
-msgstr "Your Koop URL is invalid. Please make sure it is accessible."
 
 msgid "Settings updated"
 msgstr "Settings updated"
@@ -62,11 +56,14 @@ msgstr "Client ID"
 msgid "Portal URL"
 msgstr "Portal URL"
 
-msgid "Koop URL"
-msgstr "Koop URL"
-
 msgid "Save Configuration"
 msgstr "Save Configuration"
+
+msgid "Add New Connection"
+msgstr "Add New Connection"
+
+msgid "Open"
+msgstr "Open"
 
 msgid "Welcome to the"
 msgstr "Welcome to the"
@@ -95,5 +92,20 @@ msgstr "Sign In with ArcGIS Enterprise"
 msgid "Not sure? View the documentation here."
 msgstr "Not sure? View the documentation here."
 
+msgid "Layer created successfully"
+msgstr "Layer created successfully"
+
+msgid "Your layer has been created successfully. You can now use it in ArcGIS."
+msgstr "Your layer has been created successfully. You can now use it in ArcGIS."
+
+msgid "Error creating layer"
+msgstr "Error creating layer"
+
 msgid "Data"
 msgstr "Data"
+
+msgid "Layer Name"
+msgstr "Layer Name"
+
+msgid "Layer Description"
+msgstr "Layer Description"

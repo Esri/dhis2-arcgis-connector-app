@@ -57,47 +57,18 @@ const Configure = () => {
 
   const [clientId, setClientId] = useState(settings?.arcgisConfig?.clientId);
   const [portalUrl, setPortalUrl] = useState(settings?.arcgisConfig?.portalUrl);
-  const [koopUrl, setKoopUrl] = useState(settings?.arcgisConfig?.koopUrl);
   const [portalType, setPortalType] = useState(
     settings?.arcgisConfig?.portalType
   );
 
   const [redirectUrlIcon, setRedirectUrlIcon] = useState("copy-to-clipboard");
 
-  const validateKoopUrl = async () => {
-    const response = await fetch(koopUrl);
-    return response.ok;
-  };
-
   const updateSettings = async () => {
-    if (portalType === "enterprise") {
-      const isKoopUrlValid = await validateKoopUrl();
-
-      if (!isKoopUrlValid) {
-        showAlert({
-          title: i18n.t("Koop URL is invalid"),
-          message: i18n.t(
-            "Your Koop URL is invalid. Please make sure it is accessible."
-          ),
-          type: ALERT_TYPES.DANGER,
-        });
-        return;
-      }
-    }
-
     let newSettings = {
       portalType: portalType,
       clientId: clientId,
       portalUrl: portalUrl,
-      koopUrl: koopUrl,
     };
-
-    // if portal url contains *.maps.arcgis.com, set portalType to online
-    if (portalUrl.includes(".maps.arcgis.com")) {
-      newSettings.portalType = "online";
-    } else {
-      newSettings.portalType = "enterprise";
-    }
 
     await updateSetting("arcgisConfig", settings, newSettings);
 
@@ -125,7 +96,6 @@ const Configure = () => {
       setPortalType(settings.arcgisConfig.portalType);
       setClientId(settings.arcgisConfig.clientId);
       setPortalUrl(settings.arcgisConfig.portalUrl);
-      setKoopUrl(settings.arcgisConfig.koopUrl);
     }
   }, [settings, isLoadingSettings]);
 
@@ -163,28 +133,6 @@ const Configure = () => {
 
       <StyledInputContainer>
         <h2>{i18n.t("ArcGIS Configuration")}</h2>
-        {/* <CalciteSegmentedControl
-          onCalciteSegmentedControlChange={(event) => {
-            setPortalType(event.target.value);
-          }}
-        >
-          <CalciteSegmentedControlItem
-            {...{
-              checked: portalType === "online" ? true : undefined,
-            }}
-            value="online"
-          >
-            ArcGIS Online
-          </CalciteSegmentedControlItem>
-          <CalciteSegmentedControlItem
-            {...{
-              checked: portalType === "enterprise" ? true : undefined,
-            }}
-            value="enterprise"
-          >
-            ArcGIS Enterprise
-          </CalciteSegmentedControlItem>
-        </CalciteSegmentedControl> */}
         <StyledCalciteInputText
           prefixText={i18n.t("Client ID")}
           value={clientId}
@@ -192,7 +140,7 @@ const Configure = () => {
             setClientId(event.target.value);
           }}
         />
-        {/* {portalType === "enterprise" && ( */}
+
         <StyledCalciteInputText
           prefixText={i18n.t("Portal URL")}
           value={portalUrl}
@@ -200,14 +148,7 @@ const Configure = () => {
             setPortalUrl(event.target.value);
           }}
         />
-        {/* )} */}
-        <StyledCalciteInputText
-          prefixText={i18n.t("Koop URL")}
-          value={koopUrl}
-          onCalciteInputChange={(event) => {
-            setKoopUrl(event.target.value);
-          }}
-        ></StyledCalciteInputText>
+
         <div style={{ marginTop: "1rem" }}>
           <CalciteButton iconStart="save" onClick={() => updateSettings()}>
             {i18n.t("Save Configuration")}
