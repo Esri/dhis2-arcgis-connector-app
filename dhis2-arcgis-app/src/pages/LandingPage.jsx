@@ -84,7 +84,7 @@ const LandingPage = () => {
               )}
               <br />
               {i18n.t(
-                "to enable seamless data sharing, analysis, and visualization."
+                "to enable seamless data sharing, analysis, and visualization. Test"
               )}
             </p>
             <p>
