@@ -35,7 +35,7 @@ const Container = styled.div`
   justify-content: center;
   text-align: center;
   color: black;
-  font-size: 24px;
+  font-size: 34px;
   font-weight: 400;
   word-wrap: break-word;
 `;
@@ -80,7 +80,7 @@ const LandingPage = () => {
           <CalciteLabel>
             <p>
               {i18n.t(
-                "Integrate your DHIS2 data into your ArcGIS Online or ArcGIS Enterprise"
+                "Connect your DHIS2 data directly to your ArcGIS Enterprise"
               )}
               <br />
               {i18n.t(
@@ -113,7 +113,7 @@ const LandingPage = () => {
                 href="https://www.esri.com/en-us/arcgis/products/arcgis-online/overview"
                 target="_blank"
               >
-                {i18n.t("Not sure? View the documentation here.")}
+                {i18n.t("View the documentation here.")}
               </a>
             </p>
           </CalciteLabel>
