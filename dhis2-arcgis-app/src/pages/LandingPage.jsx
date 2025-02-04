@@ -35,7 +35,7 @@ const Container = styled.div`
   justify-content: center;
   text-align: center;
   color: black;
-  font-size: 34px;
+  font-size: x-large;
   font-weight: 400;
   word-wrap: break-word;
 `;
@@ -80,11 +80,11 @@ const LandingPage = () => {
           <CalciteLabel>
             <p>
               {i18n.t(
-                "Connect your DHIS2 data directly to your ArcGIS Enterprise"
+                "Connect your DHIS2 data directly to your ArcGIS Enterprise organization"
               )}
               <br />
               {i18n.t(
-                "organization to enable seamless data sharing, analysis, and visualization."
+                "to enable seamless data sharing, analysis, and visualization."
               )}
             </p>
             <p>
