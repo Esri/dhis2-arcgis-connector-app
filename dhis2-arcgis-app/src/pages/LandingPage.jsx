@@ -30,7 +30,7 @@ const Header = styled.div`
   word-wrap: break-word;
 `;
 
-const Container = styled.div`
+const SubHeader = styled.div`
   display: flex;
   justify-content: center;
   text-align: center;
@@ -76,7 +76,7 @@ const LandingPage = () => {
           {i18n.t("Welcome to the")} <br />
           {i18n.t("DHIS2 to ArcGIS Connector App")}
         </Header>
-        <Container>
+        <SubHeader>
           <CalciteLabel>
             <p>
               {i18n.t(
@@ -95,7 +95,7 @@ const LandingPage = () => {
               {i18n.t("ArcGIS and DHIS2 instance through a few short steps.")}
             </p>
           </CalciteLabel>
-        </Container>
+        </SubHeader>
         <CalciteCard>
           <ButtonContainer>
             {/* <Button onClick={signIn} scale="l">
