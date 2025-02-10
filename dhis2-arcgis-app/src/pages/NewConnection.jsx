@@ -24,6 +24,18 @@ const StyledCalciteInputText = styled(CalciteInput)`
   width: 400px;
 `;
 
+const Description = styled.div`
+  display: flex;
+  justify-content: left;
+  text-align: left;
+  color: dark grey;
+  font-size: 16px;
+  font-weight: 400;
+  word-wrap: break-word;
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+`;
+
 const StyledCreateCalciteButton = styled(CalciteButton)`
   --calcite-color-brand: green !important;
 `;
@@ -161,12 +173,26 @@ const NewConnection = ({
         }}
       >
         <CalciteStepperItem heading="Organisation units">
+        <Description>
+           {i18n.t(
+                "Select the organisation units below to aggregate your data."
+              )}
+        </Description>
           <OrgUnitDimensionWrapper onChange={setSelectedOrgUnits} />
         </CalciteStepperItem>
         <CalciteStepperItem
           heading={i18n.t("Data")}
           {...(selectedOrgUnits.length === 0 ? { disabled: true } : undefined)}
         >
+          <Description>
+           {i18n.t(
+                "Select data items to include in your ArcGIS Layer. Note: Data elements with conflicting aggregation types will cause the layer creation to fail."
+              )}
+              <br />
+              {i18n.t(
+                "If you would like to only connect geographies for organisation units, do not select any data items."
+              )}
+        </Description>
           <div
             style={{
               display: "flex",
@@ -195,6 +221,12 @@ const NewConnection = ({
             ? { disabled: true }
             : undefined)}
         >
+          <Description>
+           {i18n.t(
+                "Select the time period for your selected data. Data may be additionally filtered by time in ArcGIS Enterprise applications and maps."
+              )}
+              <br />
+        </Description>
           <div
             style={{
               display: "flex",
@@ -217,6 +249,12 @@ const NewConnection = ({
           </div>
         </CalciteStepperItem>
         <CalciteStepperItem heading="Summary">
+        <Description>
+           {i18n.t(
+                "Create a title and description for your new ArcGIS Enterprise Layer. Both fields may be changed later in ArcGIS Enterprise."
+              )}
+              <br />
+        </Description>
           <div
             style={{
               display: "flex",
@@ -229,6 +267,7 @@ const NewConnection = ({
               prefixText={i18n.t("Layer Name")}
               value={layerName}
               onCalciteInputInput={(event) => setLayerName(event.target.value)}
+              placeholder={i18n.t("Enter a unique layer name")}
             />
             <StyledCalciteInputText
               prefixText={i18n.t("Layer Description")}
@@ -237,6 +276,7 @@ const NewConnection = ({
               onCalciteInputInput={(event) =>
                 setLayerDescription(event.target.value)
               }
+              placeholder={i18n.t("Enter a description for your layer")}
             />
           </div>
         </CalciteStepperItem>

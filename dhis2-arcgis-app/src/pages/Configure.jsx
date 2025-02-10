@@ -14,11 +14,22 @@ const StyledContainer = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+ //gap: 2rem;
+  font-size: 1rem;
+
+  a {
+    color: #007ac2;
+  }
+
+  a:hover {
+  color: #005293;
+}
 `;
 
 const StyledDescription = styled.div`
   // padding: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 `;
 
 const StyledInputContainer = styled.div`
@@ -107,11 +118,17 @@ const Configure = () => {
     <StyledContainer>
       <StyledPageHeader>{i18n.t("Configure")}</StyledPageHeader>
       <StyledDescription>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+        To configure the connection between your ArcGIS Enterprise Organization and DHIS2 instance, 
+        you will need to create an application in your ArcGIS Enterprise Organization. The configuration will
+        require the Client ID and Portal URL of the application.
       </StyledDescription>
+              <a
+                href="https://www.esri.com/en-us/arcgis/products/arcgis-online/overview"
+                target="_blank"
+                style={{ marginBottom: "1rem" }}
+              >
+                {i18n.t("Click here to view the configuration documentation and steps.")}
+              </a>
       <StyledCalciteInputText
         prefixText={i18n.t("Redirect URL")}
         readOnly
