@@ -1,16 +1,20 @@
 # DHIS2 to ArcGIS Connector App
 
-This repository contains the DHIS2 webapp that facilitates the integration of DHIS2 content with ArcGIS Online or ArcGIS Enterprise. The connection allows for seamless data sharing, analysis, and visualization.
+This repository contains a DHIS2 webapp that creates a near-real time connection between DHIS2 data and ArcGIS Enterprise using custom data feeds. The connection allows for seamless data sharing, analysis, and visualization.
 
-To use this app, you will need a DHIS2 instance and an ArcGIS named user account in either ArcGIS Enterprise or ArcGIS Online. Contact
+To use this app, you will need a DHIS2 instance and an ArcGIS named user account in ArcGIS Enterprise. Contact globalhealth@esri.com for more information about ArcGIS access.
+
+This app can be accessed through the [DHIS2 App Hub](https://apps.dhis2.org/).
 
 ## Documentation and Use
 
-**The DHIS2 to ArcGIS connector app _requires_ connection to a Koop service** to facilitate the integration between DHIS2 and ArcGIS.
+See the documentation about implementing the app [DHIS2 to ArcGIS Connector Documentation](https://github.com/ArcGIS/dhis2-arcgis-connector-koop?tab=readme-ov-file).
 
-See the documentation about implementing the app and the associated [DHIS2 to ArcGIS Connector Koop GitHub Repo](https://github.com/ArcGIS/dhis2-arcgis-connector-koop?tab=readme-ov-file).
+### ArcGIS Enterprise
 
-## Introduction
+ArcGIS Enterprise delivers industry-leading mapping and analytics to your infrastructure and the cloud. Through ArcGIS Enterprsie you can make maps and apps, manage data, share and collaborate, and perform analysis.
+
+This app allows DHIS2 users to leverage their data in the ArcGIS system using a direct connection that maintains data hosting in their DHIS2 instance. The app uses a no-code interface to allow for seamless interoperability. The connection is formed through [Custom Data Feeds](https://enterprise.arcgis.com/en/server/11.1/develop/linux/custom-data-feeds.htm). View the GitHub repository for the [DHIS2 Custom Data Feeds] (https://github.com/ArcGIS/dhis2-custom-data-feeds) for more information.
 
 ### DHIS2 (District Health Information Software 2)
 
@@ -26,20 +30,28 @@ DHIS2 is an open-source platform for managing and analyzing health data. It is d
 
 DHIS2 is widely used globally, particularly in low-resource settings, to strengthen health information systems and improve data-driven decision-making in healthcare. Its open-source nature, flexibility, and scalability make it a valuable tool for managing health data and improving health outcomes. For full DHIS API Documentation and use please visit: ([https://docs.dhis2.org/en/home.html](https://docs.dhis2.org/en/home.html))
 
-### Overview of Koop
+## Issues
 
-**Koop** is an open-source geospatial data transformation and caching engine developed by Esri. It provides a flexible and extensible platform for integrating and transforming data from various sources into GeoJSON format, making it easier to work with geospatial data in web applications and services. Here are some key points to understand about Koop:
-
-- **Data Integration**: Koop allows you to connect to different data sources, including APIs, databases, and file systems, and transform the data into a standardized GeoJSON format. This simplifies the process of working with geospatial data from diverse sources.
-- **Caching**: Koop includes a caching mechanism that stores transformed data, reducing the need to repeatedly fetch and process data from the original sources. This improves performance and allows for faster data retrieval.
-- **Extensibility**: Koop is designed to be extensible, allowing developers to create custom modules to integrate with specific data sources or implement custom data transformations. This flexibility enables the integration of new data sources and the development of specialized functionality.
-- **RESTful API**: Koop provides a RESTful API that allows clients to access and query geospatial data. The API supports standard HTTP methods such as GET, POST, PUT, and DELETE, making it easy to interact with the data stored in Koop.
-- **Integration with GIS Platforms**: Koop can be integrated with popular GIS platforms, including Esri's ArcGIS platform. This allows users to leverage the power of Koop within their existing GIS workflows and applications.
-- **Community and Ecosystem**: Koop has an active and supportive community of developers and users. The community contributes to the development of Koop, shares modules and plugins, and provides support and guidance to users. This ecosystem ensures the continuous improvement and expansion of Koop's capabilities.
-
-Overall, Koop simplifies the process of working with geospatial data by providing a flexible and extensible platform for data integration and transformation. It enables developers to build applications and services that can easily consume and process geospatial data from various sources, making it a valuable tool in the geospatial data ecosystem.
-For full Koop Documentation and use please visit: ([https://koopjs.github.io/](https://koopjs.github.io/))
+Find a bug or want to request a new feature? Please let us know by submitting an issue.
 
 ## Contributing
 
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https://github.com/esri/contributing).
+
+## Licensing
+
+Copyright 2025 Esri
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+A copy of the license is available in the repository's [license.txt](https://github-admin.esri.com/doc/LICENSE.txt) file.

@@ -251,7 +251,7 @@ const NewConnection = ({
         <CalciteStepperItem heading="Summary">
         <Description>
            {i18n.t(
-                "Create a title and description for your new ArcGIS Enterprise Layer. Both fields may be changed later in ArcGIS Enterprise. Layer names must be unique."
+                "Create a title and description for your new ArcGIS Enterprise Layer. Both fields may be changed later in ArcGIS Enterprise."
               )}
               <br />
         </Description>
@@ -267,6 +267,7 @@ const NewConnection = ({
               prefixText={i18n.t("Layer Name")}
               value={layerName}
               onCalciteInputInput={(event) => setLayerName(event.target.value)}
+              placeholder={i18n.t("Enter a unique layer name")}
             />
             <StyledCalciteInputText
               prefixText={i18n.t("Layer Description")}
@@ -275,6 +276,7 @@ const NewConnection = ({
               onCalciteInputInput={(event) =>
                 setLayerDescription(event.target.value)
               }
+              placeholder={i18n.t("Enter a description for your layer")}
             />
           </div>
         </CalciteStepperItem>
