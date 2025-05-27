@@ -15,7 +15,7 @@ import { useSystemSettings } from "../contexts/SystemSettingsContext";
 
 import { cdfTemplate } from "../template/cdfTemplate";
 import { useAppAlert, ALERT_TYPES } from "../hooks/useAppAlert";
-import { createService } from "../util/portal";
+import { createService, isServiceNameAvailable } from "../util/portal";
 
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -68,14 +68,19 @@ const NewConnection = ({
   const [finalStringParams, setFinalStringParams] = useState("");
   const [finalEncodedParams, setFinalEncodedParams] = useState("");
   const [layerName, setLayerName] = useState("");
+  const [isLayerNameValid, setIsLayerNameValid] = useState(true);
+  const [isLayerNameAvailable, setIsLayerNameAvailable] = useState(true);
+  const [isCheckingName, setIsCheckingName] = useState(false);
   const [layerDescription, setLayerDescription] = useState("");
 
   const encode = (string) =>
     btoa(string).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 
-  useEffect(() => {
-    console.log("hello render!");
-  }, []);
+  const debounceRef = useRef();
+
+  // useEffect(() => {
+  //   console.log("hello render!");
+  // }, []);
 
   useEffect(() => {
     const finalStringParams = `dimension=${cdfParams.dimension},${cdfParams.ou},${cdfParams.pe}&tableLayout=${cdfParams.tableLayout}&columns=${cdfParams.columns}&rows=${cdfParams.rows}`;
@@ -155,6 +160,64 @@ const NewConnection = ({
     }
 
     navigate("/connections");
+  };
+
+  const handleLayerNameChange = (event) => {
+    setIsCheckingName(true);
+    const newLayerName = event.target.value;
+    setLayerName(newLayerName);
+
+    if (newLayerName === "") {
+      setIsLayerNameValid(false);
+      return;
+    }
+
+    // check if new layer name has spaces, underscores, or any special characters
+    if (/[^a-zA-Z0-9]/.test(newLayerName)) {
+      showAlert({
+        title: i18n.t(`Invalid layer name: ${newLayerName}`),
+        autoClose: true,
+        message: i18n.t(
+          "Layer names cannot contain spaces, underscores, or any special characters. Please remove them to continue."
+        ),
+        type: ALERT_TYPES.DANGER,
+      });
+      setIsLayerNameValid(false);
+      setIsCheckingName(false);
+      return;
+    }
+
+    setIsLayerNameValid(true);
+
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    debounceRef.current = window.setTimeout(async () => {
+      // user has stopped typing for 500ms — fire your request
+      const isAvailable = await isServiceNameAvailable(
+        userCredential.server,
+        newLayerName,
+        userCredential.token
+      );
+
+      if (!isAvailable) {
+        showAlert({
+          title: i18n.t(`Layer name: ${newLayerName} already exists`),
+          autoClose: true,
+          message: i18n.t(
+            "The layer name you have entered already exists. Please choose a different name."
+          ),
+          type: ALERT_TYPES.DANGER,
+        });
+
+        setIsLayerNameAvailable(false);
+      } else {
+        setIsLayerNameAvailable(true);
+      }
+
+      setIsCheckingName(false);
+    }, 500);
   };
 
   return (
@@ -273,13 +336,16 @@ const NewConnection = ({
             <StyledCalciteInputText
               prefixText={i18n.t("Layer Name")}
               value={layerName}
-              onCalciteInputInput={(event) => setLayerName(event.target.value)}
+              // onCalciteInputInput={(event) => setLayerName(event.target.value)}
+              onCalciteInputInput={(event) => handleLayerNameChange(event)}
               placeholder={i18n.t("Enter a unique layer name")}
             />
             <StyledCalciteInputText
               prefixText={i18n.t("Layer Description")}
               value={layerDescription}
-              style={{ width: "600px" }}
+              style={{
+                width: "65%",
+              }}
               onCalciteInputInput={(event) =>
                 setLayerDescription(event.target.value)
               }
@@ -302,9 +368,11 @@ const NewConnection = ({
           <CalciteButton
             iconStart="add-layer-service"
             scale="l"
-            loading={isCurrentlyCreatingLayer}
+            loading={isCurrentlyCreatingLayer || isCheckingName}
             onClick={handleCreateLayer}
-            {...(layerName !== "" ? undefined : { disabled: true })}
+            {...(isLayerNameAvailable && isLayerNameValid && !isCheckingName
+              ? {}
+              : { disabled: true })}
           >
             Create Connection
           </CalciteButton>

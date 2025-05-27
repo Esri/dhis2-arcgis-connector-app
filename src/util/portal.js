@@ -44,3 +44,20 @@ export async function createService(hostingServerUrl, body) {
   const data = await response.json();
   return data;
 }
+
+export async function isServiceNameAvailable(server, serviceName, token) {
+  const url = `${server}/sharing/rest/search`;
+  const query = {
+    f: "json",
+    token: token,
+    filter: `type: "Feature Service" AND title:"${serviceName}"`,
+    // q: `title:'${serviceName}'`,
+    sortField: "title",
+    sortOrder: "desc",
+  };
+
+  const response = await esriRequest(url, { query });
+  return response.data?.results && response.data.results.length > 0
+    ? false
+    : true;
+}
