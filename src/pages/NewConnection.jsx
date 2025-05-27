@@ -8,9 +8,10 @@ import {
   CalciteInput,
 } from "@esri/calcite-components-react";
 
-import { DataDimension, PeriodDimension } from "@dhis2/analytics";
+import { DataDimension, PeriodDimension, dataTypeMap } from "@dhis2/analytics";
 import OrgUnitDimensionWrapper from "../components/OrgUnitDimensionWrapper";
 import { useAuth } from "../contexts/AuthContext";
+import { useSystemSettings } from "../contexts/SystemSettingsContext";
 
 import { cdfTemplate } from "../template/cdfTemplate";
 import { useAppAlert, ALERT_TYPES } from "../hooks/useAppAlert";
@@ -47,6 +48,8 @@ const NewConnection = ({
   const navigate = useNavigate();
   const { userCredential, hostingServerProperties } = useAuth();
   const { showAlert } = useAppAlert();
+
+  const { settings } = useSystemSettings();
 
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -173,11 +176,11 @@ const NewConnection = ({
         }}
       >
         <CalciteStepperItem heading="Organisation units">
-        <Description>
-           {i18n.t(
-                "Select the organisation units below to aggregate your data."
-              )}
-        </Description>
+          <Description>
+            {i18n.t(
+              "Select the organisation units below to aggregate your data."
+            )}
+          </Description>
           <OrgUnitDimensionWrapper onChange={setSelectedOrgUnits} />
         </CalciteStepperItem>
         <CalciteStepperItem
@@ -185,14 +188,14 @@ const NewConnection = ({
           {...(selectedOrgUnits.length === 0 ? { disabled: true } : undefined)}
         >
           <Description>
-           {i18n.t(
-                "Select data items to include in your ArcGIS Layer. Note: Data elements with conflicting aggregation types will cause the layer creation to fail."
-              )}
-              <br />
-              {i18n.t(
-                "If you would like to only connect geographies for organisation units, do not select any data items."
-              )}
-        </Description>
+            {i18n.t(
+              "Select data items to include in your ArcGIS Layer. Note: Data elements with conflicting aggregation types will cause the layer creation to fail."
+            )}
+            <br />
+            {i18n.t(
+              "If you would like to only connect geographies for organisation units, do not select any data items."
+            )}
+          </Description>
           <div
             style={{
               display: "flex",
@@ -205,6 +208,10 @@ const NewConnection = ({
             <DataDimension
               displayNameProp="displayName"
               selectedDimensions={selectedDimensions}
+              // enabledDataTypes={[
+              //   dataTypeMap.INDICATOR,
+              //   dataTypeMap.PROGRAM_INDICATOR,
+              // ]}
               onSelect={(response) => {
                 console.log(response);
                 setSelectedDimensions(response.items);
@@ -222,11 +229,11 @@ const NewConnection = ({
             : undefined)}
         >
           <Description>
-           {i18n.t(
-                "Select the time period for your selected data. Data may be additionally filtered by time in ArcGIS Enterprise applications and maps."
-              )}
-              <br />
-        </Description>
+            {i18n.t(
+              "Select the time period for your selected data. Data may be additionally filtered by time in ArcGIS Enterprise applications and maps."
+            )}
+            <br />
+          </Description>
           <div
             style={{
               display: "flex",
@@ -249,12 +256,12 @@ const NewConnection = ({
           </div>
         </CalciteStepperItem>
         <CalciteStepperItem heading="Summary">
-        <Description>
-           {i18n.t(
-                "Create a title and description for your new ArcGIS Enterprise Layer. Both fields may be changed later in ArcGIS Enterprise."
-              )}
-              <br />
-        </Description>
+          <Description>
+            {i18n.t(
+              "Create a title and description for your new ArcGIS Enterprise Layer. Both fields may be changed later in ArcGIS Enterprise."
+            )}
+            <br />
+          </Description>
           <div
             style={{
               display: "flex",
@@ -327,7 +334,7 @@ const NewConnection = ({
           </CalciteButton>
         </div> */}
       </div>
-      {debug && (
+      {settings?.arcgisConfig?.showDebugInfo && (
         <div>
           <p>Selected Org Units: {JSON.stringify(selectedOrgUnits)}</p>
           <p>Selected Dimensions: {JSON.stringify(selectedDimensions)}</p>

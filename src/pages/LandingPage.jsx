@@ -56,8 +56,8 @@ const DocContainer = styled.div`
   }
 
   a:hover {
-  color: #005293;
-}
+    color: #005293;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -84,40 +84,41 @@ const LandingPage = () => {
           justifyContent: "center",
         }}
       >
-        <img src="dhis2-app-icon.png" 
-      alt="DHIS2 ArcGIS Connector App" 
-      style={{ 
-        display: "block",
-        width: "100px",
-        margin: "0 auto 1rem auto",
-        backgroundColor: "white",
-        padding: "10px",
-        borderRadius: "5px",
-        justifyContent: "center",
-         }}
-      />
+        <img
+          src="dhis2-app-icon.png"
+          alt="DHIS2 ArcGIS Connector App"
+          style={{
+            display: "block",
+            width: "100px",
+            margin: "0 auto 1rem auto",
+            backgroundColor: "white",
+            padding: "10px",
+            borderRadius: "5px",
+            justifyContent: "center",
+          }}
+        />
         <Header>
           {i18n.t("Welcome to the")} <br />
           {i18n.t("DHIS2 to ArcGIS Connector App")}
           <br />
         </Header>
         <SubHeader>
-            <p>
-              {i18n.t(
-                "Connect your DHIS2 data directly to your ArcGIS Enterprise organization"
-              )}
-              <br />
-              {i18n.t(
-                "to enable seamless data sharing, analysis, and visualization."
-              )}
-              <br />
-              <br />
-              {i18n.t(
-                "To get started, you will need to configure the connection between your"
-              )}
-              <br />
-              {i18n.t("ArcGIS and DHIS2 instance through a few short steps.")}
-            </p>
+          <p>
+            {i18n.t(
+              "Connect your DHIS2 data directly to your ArcGIS Enterprise organization"
+            )}
+            <br />
+            {i18n.t(
+              "to enable seamless data sharing, analysis, and visualization."
+            )}
+            <br />
+            <br />
+            {i18n.t(
+              "To get started, you will need to configure the connection between your"
+            )}
+            <br />
+            {i18n.t("ArcGIS and DHIS2 instance through a few short steps.")}
+          </p>
         </SubHeader>
         <CalciteCard>
           <ButtonContainer>

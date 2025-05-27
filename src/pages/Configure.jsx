@@ -4,7 +4,12 @@ import styled from "styled-components";
 
 import i18n from "@dhis2/d2-i18n";
 
-import { CalciteButton, CalciteInput } from "@esri/calcite-components-react";
+import {
+  CalciteButton,
+  CalciteCheckbox,
+  CalciteInput,
+  CalciteLabel,
+} from "@esri/calcite-components-react";
 import { useAppAlert, ALERT_TYPES } from "../hooks/useAppAlert";
 import { useSystemSettings } from "../contexts/SystemSettingsContext";
 import { useAuth } from "../contexts/AuthContext";
@@ -14,7 +19,7 @@ const StyledContainer = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
- //gap: 2rem;
+  //gap: 2rem;
   font-size: 1rem;
 
   a {
@@ -22,8 +27,8 @@ const StyledContainer = styled.div`
   }
 
   a:hover {
-  color: #005293;
-}
+    color: #005293;
+  }
 `;
 
 const StyledDescription = styled.div`
@@ -72,6 +77,10 @@ const Configure = () => {
     settings?.arcgisConfig?.portalType
   );
 
+  const [showDebugInfo, setShowDebugInfo] = useState(
+    settings?.arcgisConfig?.showDebugInfo || false
+  );
+
   const [redirectUrlIcon, setRedirectUrlIcon] = useState("copy-to-clipboard");
 
   const updateSettings = async () => {
@@ -79,6 +88,7 @@ const Configure = () => {
       portalType: portalType,
       clientId: clientId,
       portalUrl: portalUrl,
+      showDebugInfo: showDebugInfo,
     };
 
     await updateSetting("arcgisConfig", settings, newSettings);
@@ -107,6 +117,7 @@ const Configure = () => {
       setPortalType(settings.arcgisConfig.portalType);
       setClientId(settings.arcgisConfig.clientId);
       setPortalUrl(settings.arcgisConfig.portalUrl);
+      setShowDebugInfo(settings.arcgisConfig.showDebugInfo || false);
     }
   }, [settings, isLoadingSettings]);
 
@@ -118,17 +129,20 @@ const Configure = () => {
     <StyledContainer>
       <StyledPageHeader>{i18n.t("Configure")}</StyledPageHeader>
       <StyledDescription>
-        To configure the connection between your ArcGIS Enterprise Organization and DHIS2 instance, 
-        you will need to create an application in your ArcGIS Enterprise Organization. The configuration will
-        require the Client ID and Portal URL of the application.
+        To configure the connection between your ArcGIS Enterprise Organization
+        and DHIS2 instance, you will need to create an application in your
+        ArcGIS Enterprise Organization. The configuration will require the
+        Client ID and Portal URL of the application.
       </StyledDescription>
-              <a
-                href="https://www.esri.com/en-us/arcgis/products/arcgis-online/overview"
-                target="_blank"
-                style={{ marginBottom: "1rem" }}
-              >
-                {i18n.t("Click here to view the configuration documentation and steps.")}
-              </a>
+      <a
+        href="https://www.esri.com/en-us/arcgis/products/arcgis-online/overview"
+        target="_blank"
+        style={{ marginBottom: "1rem" }}
+      >
+        {i18n.t(
+          "Click here to view the configuration documentation and steps."
+        )}
+      </a>
       <StyledCalciteInputText
         prefixText={i18n.t("Redirect URL")}
         readOnly
@@ -147,6 +161,18 @@ const Configure = () => {
           appearance={redirectUrlIcon === "check" ? "outline" : "solid"}
         ></StyledCalciteButtonCopyToClipboard>
       </StyledCalciteInputText>
+
+      <StyledInputContainer style={{ marginTop: "2rem" }}>
+        <h2 style={{ marginBottom: 0 }}>{i18n.t("Show Debug Info")}</h2>
+
+        <CalciteLabel layout="inline">
+          <CalciteCheckbox
+            iconStart="save"
+            onCalciteCheckboxChange={() => setShowDebugInfo(!showDebugInfo)}
+          ></CalciteCheckbox>
+          {i18n.t("Show Debug Information while creating a connection")}
+        </CalciteLabel>
+      </StyledInputContainer>
 
       <StyledInputContainer>
         <h2>{i18n.t("ArcGIS Configuration")}</h2>
