@@ -5,8 +5,17 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-05-27T23:08:35.632Z\n"
-"PO-Revision-Date: 2025-05-27T23:08:35.633Z\n"
+"POT-Creation-Date: 2025-05-28T04:22:14.671Z\n"
+"PO-Revision-Date: 2025-05-28T04:22:14.671Z\n"
+
+msgid "Debug Information"
+msgstr "Debug Information"
+
+msgid "Copied"
+msgstr "Copied"
+
+msgid "Copy Debug Info to Clipboard"
+msgstr "Copy Debug Info to Clipboard"
 
 msgid "My Content"
 msgstr "My Content"
@@ -22,6 +31,9 @@ msgstr "Sign Out"
 
 msgid "DHIS2 to ArcGIS Connector"
 msgstr "DHIS2 to ArcGIS Connector"
+
+msgid "Show Debug Information"
+msgstr "Show Debug Information"
 
 msgid "Connections"
 msgstr "Connections"
@@ -49,12 +61,6 @@ msgstr "Click here to view the configuration documentation and steps."
 
 msgid "Redirect URL"
 msgstr "Redirect URL"
-
-msgid "Show Debug Info"
-msgstr "Show Debug Info"
-
-msgid "Show Debug Information while creating a connection"
-msgstr "Show Debug Information while creating a connection"
 
 msgid "ArcGIS Configuration"
 msgstr "ArcGIS Configuration"

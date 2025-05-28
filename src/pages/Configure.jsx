@@ -163,7 +163,7 @@ const Configure = () => {
       </StyledCalciteInputText>
 
       <StyledInputContainer style={{ marginTop: "2rem" }}>
-        <h2 style={{ marginBottom: 0 }}>{i18n.t("Show Debug Info")}</h2>
+        <h2 style={{ marginBottom: 0 }}>{i18n.t("Show Debug Information")}</h2>
 
         <CalciteLabel layout="inline">
           <CalciteCheckbox
@@ -171,7 +171,7 @@ const Configure = () => {
             checked={showDebugInfo}
             onCalciteCheckboxChange={() => setShowDebugInfo(!showDebugInfo)}
           ></CalciteCheckbox>
-          {i18n.t("Show Debug Information while creating a connection")}
+          {i18n.t("Show Debug Information")}
         </CalciteLabel>
       </StyledInputContainer>
 

@@ -164,7 +164,7 @@ const Header = ({ isShowingDebugInfo, setIsShowingDebugInfo }) => {
           {settings?.arcgisConfig?.showDebugInfo && (
             <CalciteMenuItem
               onClick={() => setIsShowingDebugInfo(!isShowingDebugInfo)}
-              text={i18n.t("Show Debug Info")}
+              text={i18n.t("Show Debug Information")}
               iconStart="debug"
               textEnabled
             ></CalciteMenuItem>
@@ -177,7 +177,7 @@ const Header = ({ isShowingDebugInfo, setIsShowingDebugInfo }) => {
                 })
               }
               text={i18n.t("Connections")}
-              iconStart="gear"
+              iconStart="layer-connection"
               textEnabled
               active={
                 window.location.hash === "#/connections" ? true : undefined
