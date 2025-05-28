@@ -20,6 +20,8 @@ import { createService, isServiceNameAvailable } from "../util/portal";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
+import ReactJsonView from "@microlink/react-json-view";
+
 const StyledCalciteInputText = styled(CalciteInput)`
   --calcite-input-prefix-size: 140px;
   width: 400px;
@@ -54,6 +56,7 @@ const NewConnection = ({
   const [currentStep, setCurrentStep] = useState(1);
 
   const [debug, setDebug] = useState(false);
+  const [debugInfo, setDebugInfo] = useState({});
   // const [isCreatingLayer, setIsCreatingLayer] = useState(false);
   const [selectedOrgUnits, setSelectedOrgUnits] = useState([]);
   const [selectedDimensions, setSelectedDimensions] = useState([]);
@@ -104,7 +107,35 @@ const NewConnection = ({
       ...cdfParams,
       ...updatedCdfParams,
     });
+
+    setDebugInfo({
+      selectedOrgUnits,
+      selectedDimensions,
+      selectedPeriods,
+      cdfParams: updatedCdfParams,
+      finalStringParams,
+      finalEncodedParams: encode(finalStringParams),
+      finalApiUrl: `https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`,
+    });
   }, [selectedOrgUnits, selectedDimensions, selectedPeriods]);
+
+  // <div>
+  //         <p>Selected Org Units: {JSON.stringify(selectedOrgUnits)}</p>
+  //         <p>Selected Dimensions: {JSON.stringify(selectedDimensions)}</p>
+  //         <p>Selected Periods: {JSON.stringify(selectedPeriods)}</p>
+  //         <p>CDF Params: {JSON.stringify(cdfParams)}</p>
+  //         <p>Final String Params: {finalStringParams}</p>
+  //         <p>
+  //           API Testing Url:{" "}
+  //           <a
+  //             href={`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
+  //             target="_blank"
+  //           >
+  //             {`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
+  //           </a>
+  //         </p>
+  //         <p>Final Encoded Params: {finalEncodedParams}</p>
+  //       </div>
 
   const handleCreateLayer = async () => {
     setIsCurrentlyCreatingLayer(true);
@@ -403,8 +434,24 @@ const NewConnection = ({
         </div> */}
       </div>
       {settings?.arcgisConfig?.showDebugInfo && (
-        <div>
-          <p>Selected Org Units: {JSON.stringify(selectedOrgUnits)}</p>
+        <div style={{ margin: "1rem", paddingBottom: "2rem" }}>
+          <h2>Debug Information</h2>
+          <p>
+            API Testing Url:{" "}
+            <a
+              href={`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
+              target="_blank"
+            >
+              {`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
+            </a>
+          </p>
+          <ReactJsonView
+            displayDataTypes={false}
+            displayObjectSize={false}
+            name="debugInfo"
+            src={debugInfo}
+          />
+          {/* <p>Selected Org Units: {JSON.stringify(selectedOrgUnits)}</p>
           <p>Selected Dimensions: {JSON.stringify(selectedDimensions)}</p>
           <p>Selected Periods: {JSON.stringify(selectedPeriods)}</p>
           <p>CDF Params: {JSON.stringify(cdfParams)}</p>
@@ -418,7 +465,7 @@ const NewConnection = ({
               {`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
             </a>
           </p>
-          <p>Final Encoded Params: {finalEncodedParams}</p>
+          <p>Final Encoded Params: {finalEncodedParams}</p> */}
         </div>
       )}
     </div>
