@@ -168,6 +168,7 @@ const Configure = () => {
         <CalciteLabel layout="inline">
           <CalciteCheckbox
             iconStart="save"
+            checked={showDebugInfo}
             onCalciteCheckboxChange={() => setShowDebugInfo(!showDebugInfo)}
           ></CalciteCheckbox>
           {i18n.t("Show Debug Information while creating a connection")}

@@ -46,6 +46,7 @@ const StyledCreateCalciteButton = styled(CalciteButton)`
 const NewConnection = ({
   isCurrentlyCreatingLayer,
   setIsCurrentlyCreatingLayer,
+  updateDebugInfo,
 }) => {
   const navigate = useNavigate();
   const { userCredential, hostingServerProperties } = useAuth();
@@ -85,38 +86,52 @@ const NewConnection = ({
   //   console.log("hello render!");
   // }, []);
 
-  useEffect(() => {
-    const finalStringParams = `dimension=${cdfParams.dimension},${cdfParams.ou},${cdfParams.pe}&tableLayout=${cdfParams.tableLayout}&columns=${cdfParams.columns}&rows=${cdfParams.rows}`;
+  // useEffect(() => {
+  //   const finalStringParams = `dimension=${cdfParams.dimension},${cdfParams.ou},${cdfParams.pe}&tableLayout=${cdfParams.tableLayout}&columns=${cdfParams.columns}&rows=${cdfParams.rows}`;
 
-    setFinalStringParams(finalStringParams);
-    setFinalEncodedParams(encode(finalStringParams));
-  }, [cdfParams]);
+  //   setFinalStringParams(finalStringParams);
+  //   setFinalEncodedParams(encode(finalStringParams));
+  // }, [cdfParams]);
 
   useEffect(() => {
     const dimensions = selectedDimensions.map((dimension) => dimension.id);
     const periods = selectedPeriods.map((period) => period.id);
     const orgUnits = selectedOrgUnits.map((orgUnit) => orgUnit.id);
 
-    const updatedCdfParams = {
-      dimension: `dx:${dimensions.join(";")}`,
-      ou: `ou:${orgUnits.join(";")}`,
-      pe: `pe:${periods.join(";")}`,
-    };
+    const finalStringParams = `dimension=dx:${dimensions.join(
+      ";"
+    )},ou:${orgUnits.join(";")},pe:${periods.join(
+      ";"
+    )}&tableLayout=true&columns=dx&rows=ou;pe`;
+    const encodedFinalStringParams = encode(finalStringParams);
 
-    setCdfParams({
-      ...cdfParams,
-      ...updatedCdfParams,
-    });
+    setFinalStringParams(finalStringParams);
+    setFinalEncodedParams(encodedFinalStringParams);
 
-    setDebugInfo({
+    // const updatedCdfParams = {
+    //   dimension: `dx:${dimensions.join(";")}`,
+    //   ou: `ou:${orgUnits.join(";")}`,
+    //   pe: `pe:${periods.join(";")}`,
+    // };
+
+    // setCdfParams({
+    //   ...cdfParams,
+    //   ...updatedCdfParams,
+    // });
+
+    const newDebugInfo = {
       selectedOrgUnits,
       selectedDimensions,
       selectedPeriods,
-      cdfParams: updatedCdfParams,
+      // cdfParams: updatedCdfParams,
       finalStringParams,
-      finalEncodedParams: encode(finalStringParams),
+      finalEncodedParams: encodedFinalStringParams,
       finalApiUrl: `https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`,
-    });
+    };
+
+    setDebugInfo(newDebugInfo);
+
+    updateDebugInfo(newDebugInfo);
   }, [selectedOrgUnits, selectedDimensions, selectedPeriods]);
 
   // <div>
@@ -170,6 +185,7 @@ const NewConnection = ({
           ),
           type: ALERT_TYPES.SUCCESS,
         });
+        navigate("/connections");
       } else {
         showAlert({
           title: i18n.t("Error creating layer"),
@@ -189,8 +205,6 @@ const NewConnection = ({
     } finally {
       setIsCurrentlyCreatingLayer(false);
     }
-
-    navigate("/connections");
   };
 
   const handleLayerNameChange = (event) => {
@@ -433,7 +447,7 @@ const NewConnection = ({
           </CalciteButton>
         </div> */}
       </div>
-      {settings?.arcgisConfig?.showDebugInfo && (
+      {/* {settings?.arcgisConfig?.showDebugInfo && (
         <div style={{ margin: "1rem", paddingBottom: "2rem" }}>
           <h2>Debug Information</h2>
           <p>
@@ -451,23 +465,9 @@ const NewConnection = ({
             name="debugInfo"
             src={debugInfo}
           />
-          {/* <p>Selected Org Units: {JSON.stringify(selectedOrgUnits)}</p>
-          <p>Selected Dimensions: {JSON.stringify(selectedDimensions)}</p>
-          <p>Selected Periods: {JSON.stringify(selectedPeriods)}</p>
-          <p>CDF Params: {JSON.stringify(cdfParams)}</p>
-          <p>Final String Params: {finalStringParams}</p>
-          <p>
-            API Testing Url:{" "}
-            <a
-              href={`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
-              target="_blank"
-            >
-              {`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
-            </a>
-          </p>
-          <p>Final Encoded Params: {finalEncodedParams}</p> */}
+         
         </div>
-      )}
+      )} */}
     </div>
   );
 };

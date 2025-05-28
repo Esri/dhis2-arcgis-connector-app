@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 
 import styled from "styled-components";
 
@@ -12,6 +12,7 @@ import {
   CalciteTableCell,
   CalciteButton,
 } from "@esri/calcite-components-react";
+
 import { useNavigate } from "react-router-dom";
 import { queryForServices } from "../util/portal";
 
@@ -36,6 +37,11 @@ const Connections = () => {
 
   const [services, setServices] = useState([]);
 
+  const [sortConfig, setSortConfig] = useState({
+    key: "created",
+    direction: "desc",
+  });
+
   async function fetchServices() {
     const response = await queryForServices(
       userCredential.server,
@@ -50,6 +56,50 @@ const Connections = () => {
       fetchServices();
     }
   }, [userCredential]);
+
+  const sortedData = useMemo(() => {
+    if (!sortConfig.key) return [...services];
+
+    const { key, direction } = sortConfig;
+    return [...services].sort((a, b) => {
+      let aVal = a[key];
+      let bVal = b[key];
+
+      // Handle null or undefined
+      if (aVal == null) aVal = "";
+      if (bVal == null) bVal = "";
+
+      // Date comparison
+      if (key === "created" || key === "modified") {
+        aVal = new Date(aVal).getTime();
+        bVal = new Date(bVal).getTime();
+      }
+
+      // Number comparison
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return direction === "asc" ? aVal - bVal : bVal - aVal;
+      }
+
+      // String comparison
+      aVal = String(aVal).toLowerCase();
+      bVal = String(bVal).toLowerCase();
+      const cmp = aVal.localeCompare(bVal);
+      return direction === "asc" ? cmp : -cmp;
+    });
+  }, [services, sortConfig]);
+
+  const requestSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const getArrow = (key) => {
+    if (sortConfig.key !== key) return null;
+    return sortConfig.direction === "asc" ? "sorted asc" : "sorted desc";
+  };
 
   return (
     <StyledContainer>
@@ -74,20 +124,40 @@ const Connections = () => {
       </div>
 
       {services.length > 0 && (
-        <CalciteTable interactionMode="static" striped pageSize={10}>
+        <CalciteTable numbered interactionMode="static" striped pageSize={10}>
           <CalciteTableRow slot="table-header">
-            <CalciteTableHeader heading="Title"></CalciteTableHeader>
-            <CalciteTableHeader heading="Description"></CalciteTableHeader>
+            <CalciteTableHeader
+              heading="Title"
+              style={{ cursor: "pointer" }}
+              onClick={() => requestSort("title")}
+              description={getArrow("title")}
+            ></CalciteTableHeader>
+            <CalciteTableHeader
+              heading="Description"
+              onClick={() => requestSort("description")}
+              style={{ cursor: "pointer" }}
+              description={getArrow("description")}
+            ></CalciteTableHeader>
             {/* <CalciteTableHeader heading="URL"></CalciteTableHeader> */}
-            <CalciteTableHeader heading="Created By"></CalciteTableHeader>
-            <CalciteTableHeader heading="Created On"></CalciteTableHeader>
+            <CalciteTableHeader
+              heading="Created By"
+              onClick={() => requestSort("owner")}
+              style={{ cursor: "pointer" }}
+              description={getArrow("owner")}
+            ></CalciteTableHeader>
+            <CalciteTableHeader
+              style={{ cursor: "pointer" }}
+              onClick={() => requestSort("created")}
+              description={getArrow("created")}
+              heading="Created On"
+            ></CalciteTableHeader>
             <CalciteTableHeader
               heading="View in ArcGIS"
               alignment="center"
             ></CalciteTableHeader>
           </CalciteTableRow>
 
-          {services.map((service) => (
+          {sortedData.map((service) => (
             <CalciteTableRow key={service.id}>
               <CalciteTableCell>{service.title}</CalciteTableCell>
               <CalciteTableCell>{service.description}</CalciteTableCell>

@@ -17,7 +17,7 @@ import { useSystemSettings } from "../contexts/SystemSettingsContext";
 
 import SubHeader from "./SubHeader";
 
-const Header = () => {
+const Header = ({ isShowingDebugInfo, setIsShowingDebugInfo }) => {
   const navigate = useNavigate();
   const { userCredential, signIn, signOut, userInformation, isLoadingAuth } =
     useAuth();
@@ -161,6 +161,14 @@ const Header = () => {
           active={window.location.hash === "#/" ? true : undefined}
         ></CalciteNavigationLogo>
         <CalciteMenu slot="content-end">
+          {settings?.arcgisConfig?.showDebugInfo && (
+            <CalciteMenuItem
+              onClick={() => setIsShowingDebugInfo(!isShowingDebugInfo)}
+              text={i18n.t("Show Debug Info")}
+              iconStart="debug"
+              textEnabled
+            ></CalciteMenuItem>
+          )}
           {userCredential && (
             <CalciteMenuItem
               onClick={() =>
@@ -169,7 +177,7 @@ const Header = () => {
                 })
               }
               text={i18n.t("Connections")}
-              iconStart="list"
+              iconStart="gear"
               textEnabled
               active={
                 window.location.hash === "#/connections" ? true : undefined
