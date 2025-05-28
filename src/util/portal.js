@@ -8,6 +8,7 @@ export async function queryForServices(server, token) {
     q: "typekeywords:'providerCustomData'",
     sortField: "created",
     sortOrder: "desc",
+    num: 100,
   };
 
   const response = await esriRequest(url, { query });

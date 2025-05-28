@@ -46,6 +46,7 @@ import "@esri/calcite-components/dist/components/calcite-table-cell";
 import "@esri/calcite-components/dist/components/calcite-dialog";
 import "@esri/calcite-components/dist/components/calcite-icon";
 import "@esri/calcite-components/dist/components/calcite-sheet";
+import "@esri/calcite-components/dist/components/calcite-pagination";
 import "@esri/calcite-components/dist/calcite/calcite.css";
 
 // Set Calcite assets path

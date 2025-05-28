@@ -217,13 +217,14 @@ const NewConnection = ({
       return;
     }
 
-    // check if new layer name has spaces, underscores, or any special characters
-    if (/[^a-zA-Z0-9]/.test(newLayerName)) {
+    // `newLayerName` should not contain any spaces or special characters except underscores
+    const isValidLayerName = /^[a-zA-Z0-9_]+$/.test(newLayerName);
+    if (!isValidLayerName) {
       showAlert({
         title: i18n.t(`Invalid layer name: ${newLayerName}`),
         autoClose: true,
         message: i18n.t(
-          "Layer names cannot contain spaces, underscores, or any special characters. Please remove them to continue."
+          "Layer names cannot contain spaces or any special characters except underscores. Please remove them to continue."
         ),
         type: ALERT_TYPES.DANGER,
       });

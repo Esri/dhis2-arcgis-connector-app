@@ -11,6 +11,7 @@ import {
   CalciteTableRow,
   CalciteTableCell,
   CalciteButton,
+  CalcitePagination,
 } from "@esri/calcite-components-react";
 
 import { useNavigate } from "react-router-dom";
@@ -124,8 +125,20 @@ const Connections = () => {
       </div>
 
       {services.length > 0 && (
-        <CalciteTable numbered interactionMode="static" striped pageSize={10}>
-          <CalciteTableRow slot="table-header">
+        <CalciteTable
+          style={{
+            maxHeight: "calc(75vh - 200px)",
+          }}
+          numbered
+          interactionMode="static"
+          striped
+        >
+          <CalciteTableRow
+            slot="table-header"
+            alignment="center"
+            // sticky header
+            style={{ position: "sticky", top: 0, zIndex: 1 }}
+          >
             <CalciteTableHeader
               heading="Title"
               style={{ cursor: "pointer" }}
@@ -182,6 +195,18 @@ const Connections = () => {
           ))}
         </CalciteTable>
       )}
+      {/* <CalcitePagination
+        pageSize={10}
+        startItem={0}
+        totalItems={sortedData.length}
+        style={{
+          justifyContent: "center",
+        }}
+        onCalcitePaginationChange={(event) => {
+          console.log("Page changed to:", event.target.startItem);
+          // Handle pagination logic here if needed
+        }}
+      ></CalcitePagination> */}
     </StyledContainer>
   );
 };
