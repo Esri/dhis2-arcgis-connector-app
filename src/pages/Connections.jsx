@@ -123,6 +123,19 @@ const Connections = () => {
           {i18n.t("Add New Connection")}
         </CalciteButton>
       </div>
+      <div
+        style={{
+          fontSize: "1.2rem",
+          fontWeight: "bold",
+        }}
+      >
+        {i18n.t("View all existing connections")}
+      </div>
+      <div>
+        {i18n.t(
+          "Connections are live feeds to your DHIS2 data. The data remains in DHIS2. To delete connections, you can do so from the ArcGIS Enterprise portal."
+        )}
+      </div>
 
       {services.length > 0 && (
         <CalciteTable

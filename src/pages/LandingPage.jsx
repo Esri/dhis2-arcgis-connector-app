@@ -120,16 +120,16 @@ const LandingPage = () => {
             {i18n.t("ArcGIS and DHIS2 instance through a few short steps.")}
           </p>
         </SubHeader>
-        <CalciteCard>
-          <ButtonContainer>
-            {/* <Button onClick={signIn} scale="l">
+
+        <ButtonContainer>
+          {/* <Button onClick={signIn} scale="l">
               {i18n.t("Sign In with ArcGIS Online")}
             </Button> */}
-            <CalciteButton iconStart="arcgis-online" onClick={signIn} scale="l">
-              {i18n.t("Sign In with ArcGIS Enterprise")}
-            </CalciteButton>
-          </ButtonContainer>
-        </CalciteCard>
+          <CalciteButton iconStart="arcgis-online" onClick={signIn} scale="l">
+            {i18n.t("Sign In with ArcGIS Enterprise")}
+          </CalciteButton>
+        </ButtonContainer>
+
         <DocContainer>
           <CalciteLabel>
             <p>

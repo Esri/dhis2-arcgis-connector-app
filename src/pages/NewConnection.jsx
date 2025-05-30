@@ -29,6 +29,7 @@ const StyledCalciteInputText = styled(CalciteInput)`
 
 const Description = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: left;
   text-align: left;
   color: dark grey;
@@ -286,9 +287,23 @@ const NewConnection = ({
       >
         <CalciteStepperItem heading="Organisation units">
           <Description>
-            {i18n.t(
-              "Select the organisation units below to aggregate your data."
-            )}
+            <div
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              {i18n.t(
+                "Select the organisation units below to aggregate your data."
+              )}
+            </div>
+            <br />
+            <div>
+              {i18n.t(
+                "Combining organisation units with different geography types is not supported. Please make separate connections for different geography types."
+              )}
+            </div>
+            <br />
           </Description>
           <OrgUnitDimensionWrapper onChange={setSelectedOrgUnits} />
         </CalciteStepperItem>
@@ -297,13 +312,20 @@ const NewConnection = ({
           {...(selectedOrgUnits.length === 0 ? { disabled: true } : undefined)}
         >
           <Description>
-            {i18n.t(
-              "Select data items to include in your ArcGIS Layer. Note: Data elements with conflicting aggregation types will cause the layer creation to fail."
-            )}
+            <div
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              {i18n.t("Select data items to include in your ArcGIS Layer. ")}
+            </div>
             <br />
-            {i18n.t(
-              "If you would like to only connect geographies for organisation units, do not select any data items."
-            )}
+            <div>
+              {i18n.t(
+                "Note: Data elements with conflicting aggregation types will cause the layer creation to fail. If you would like to only connect geographies for organisation units, do not select any data items."
+              )}
+            </div>
           </Description>
           <div
             style={{
@@ -338,9 +360,20 @@ const NewConnection = ({
             : undefined)}
         >
           <Description>
-            {i18n.t(
-              "Select the time period for your selected data. Data may be additionally filtered by time in ArcGIS Enterprise applications and maps."
-            )}
+            <div
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              {i18n.t("Select the time period for your selected data.")}
+            </div>
+            <br />
+            <div>
+              {i18n.t(
+                "Data may be additionally filtered by time in ArcGIS Enterprise applications and maps."
+              )}
+            </div>
             <br />
           </Description>
           <div
@@ -427,48 +460,7 @@ const NewConnection = ({
             Cancel
           </CalciteButton>
         )}
-        {/* <div style={{ display: "flex", gap: "1rem" }}>
-          <CalciteButton
-            {...(currentStep === 1 ? { disabled: true } : undefined)}
-            appearance="outline"
-            scale="l"
-            onClick={() => setCurrentStep(currentStep - 1)}
-          >
-            Previous
-          </CalciteButton>
-
-          <CalciteButton
-            iconStart={
-              currentStep === 4 ? "add-layer-service" : "chevron-right"
-            }
-            scale="l"
-            onClick={() => setCurrentStep(currentStep + 1)}
-          >
-            {currentStep === 4 ? "Create" : "Next"}
-          </CalciteButton>
-        </div> */}
       </div>
-      {/* {settings?.arcgisConfig?.showDebugInfo && (
-        <div style={{ margin: "1rem", paddingBottom: "2rem" }}>
-          <h2>Debug Information</h2>
-          <p>
-            API Testing Url:{" "}
-            <a
-              href={`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
-              target="_blank"
-            >
-              {`https://dhis2.esrigcazure.com/dhis/api/40/analytics?${finalStringParams}`}
-            </a>
-          </p>
-          <ReactJsonView
-            displayDataTypes={false}
-            displayObjectSize={false}
-            name="debugInfo"
-            src={debugInfo}
-          />
-         
-        </div>
-      )} */}
     </div>
   );
 };
