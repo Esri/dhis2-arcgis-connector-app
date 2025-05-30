@@ -122,11 +122,20 @@ const Header = ({ isShowingDebugInfo, setIsShowingDebugInfo }) => {
               <CalciteLink target="_blank" href={myContentLink}>
                 {i18n.t("My Content")}
               </CalciteLink>
-              <CalciteLink target="_blank" href={myContentLink}>
+              <CalciteLink
+                target="_blank"
+                href="https://github.com/ArcGIS/dhis2-arcgis-connector-app/issues"
+              >
                 {i18n.t("Provide Feedback")}
               </CalciteLink>
-              <CalciteLink target="_blank" href={myContentLink}>
+              <CalciteLink
+                target="_blank"
+                href="https://github.com/ArcGIS/dhis2-arcgis-connector-app/blob/main/DHIS2_ArcGIS_Connector_UserManual.pdf"
+              >
                 {i18n.t("User Guide")}
+              </CalciteLink>
+              <CalciteLink target="_blank" href="mailto:globalhealth@esri.com">
+                {i18n.t("Contact the Esri Team")}
               </CalciteLink>
             </div>
           </div>
@@ -211,6 +220,17 @@ const Header = ({ isShowingDebugInfo, setIsShowingDebugInfo }) => {
               onClick={signIn}
             ></CalciteMenuItem>
           )}
+          <CalciteMenuItem
+            text={i18n.t("User Guide")}
+            iconStart="question"
+            textEnabled
+            onClick={() =>
+              window.open(
+                "https://github.com/ArcGIS/dhis2-arcgis-connector-app/blob/main/DHIS2_ArcGIS_Connector_UserManual.pdf",
+                "_blank"
+              )
+            }
+          ></CalciteMenuItem>
         </CalciteMenu>
         {userCredential && userInformation && (
           <>

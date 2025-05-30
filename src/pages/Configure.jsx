@@ -129,20 +129,11 @@ const Configure = () => {
     <StyledContainer>
       <StyledPageHeader>{i18n.t("Configure")}</StyledPageHeader>
       <StyledDescription>
-        To configure the connection between your ArcGIS Enterprise Organization
-        and DHIS2 instance, you will need to create an application in your
-        ArcGIS Enterprise Organization. The configuration will require the
-        Client ID and Portal URL of the application.
-      </StyledDescription>
-      <a
-        href="https://www.esri.com/en-us/arcgis/products/arcgis-online/overview"
-        target="_blank"
-        style={{ marginBottom: "1rem" }}
-      >
         {i18n.t(
-          "Click here to view the configuration documentation and steps."
+          "To configure the connection between your ArcGIS Enterprise Organization and DHIS2 instance, you will need to create an application in your ArcGIS Enterprise Organization. The configuration will require the Client ID and Portal URL of the application."
         )}
-      </a>
+      </StyledDescription>
+
       <StyledCalciteInputText
         prefixText={i18n.t("Redirect URL")}
         readOnly
