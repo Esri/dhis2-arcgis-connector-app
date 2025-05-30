@@ -2,13 +2,22 @@
 
 This repository contains a DHIS2 webapp that creates a near-real time connection between DHIS2 data and ArcGIS Enterprise using custom data feeds. The connection allows for seamless data sharing, analysis, and visualization.
 
-To use this app, you will need a DHIS2 instance and an ArcGIS named user account in ArcGIS Enterprise. For additional information on ArcGIS access, DHIS2 users can explore more information and Esri’s offerings [here](https://storymaps.arcgis.com/stories/b21a12d056e14186a27424cef67965de).
+To use this app, you will need a DHIS2 instance and an ArcGIS named user account in ArcGIS Enterprise. For additional information on ArcGIS access, DHIS2 users can explore Esri’s offerings [here](https://storymaps.arcgis.com/stories/b21a12d056e14186a27424cef67965de).
 
 This app can be accessed through the [DHIS2 App Hub](https://apps.dhis2.org/).
 
 ## Documentation and Use
 
 See the documentation about implementing the app [DHIS2 to ArcGIS Connector Documentation](https://github.com/ArcGIS/dhis2-arcgis-connector-app/blob/main/DHIS2_ArcGIS_Connector_UserManual.pdf).
+
+### Prerequisites
+
+Before you can get started with the DHIS2 Connector App, you must have access to the following
+
+1. ArcGIS Enterprise Base Deployment (11.3 or higher)
+2. Access to the hosting server of ArcGIS Enterprise Base Deployment as an admin
+3. Deployed the [DHIS2 Custom Data Feed](https://github.com/ArcGIS/dhis2-custom-data-feeds/tree/main) to your ArcGIS Enterprise
+4. DHIS2 Admin access to add the app from the DHIS2 App Hub
 
 ### ArcGIS
 
@@ -20,7 +29,7 @@ ArcGIS includes a suite of products that work across desktop, web, mobile, and e
 
 ArcGIS Enterprise is Esri’s comprehensive geospatial platform designed for organizations that need to manage, analyze, and share spatial data securely within their own IT environment. It includes powerful tools for mapping, data visualization, spatial analytics, and collaboration. Built on a scalable architecture, ArcGIS Enterprise supports advanced workflows, real-time data integration, and customizable apps—all while maintaining control over data privacy, infrastructure, and user access.
 
-This app allows DHIS2 users to leverage their data in the ArcGIS system using a direct connection to an ArcGIS Enterprise instance that maintains data hosting in their DHIS2 instance. The app uses a no-code interface to allow for seamless interoperability. The connection is formed through [Custom Data Feeds](https://enterprise.arcgis.com/en/server/11.1/develop/linux/custom-data-feeds.htm). View the GitHub repository for the [DHIS2 Custom Data Feeds] (https://github.com/ArcGIS/dhis2-custom-data-feeds) for more information.
+This app allows DHIS2 users to leverage their data in the ArcGIS system using a direct connection to an ArcGIS Enterprise instance that maintains data hosting in their DHIS2 instance. The app uses a no-code interface to allow for seamless interoperability. The connection is formed through [Custom Data Feeds](https://enterprise.arcgis.com/en/server/11.1/develop/linux/custom-data-feeds.htm). View the GitHub repository for the [DHIS2 Custom Data Feeds](https://github.com/ArcGIS/dhis2-custom-data-feeds) for more information.
 
 ### DHIS2 (District Health Information Software 2)
 
