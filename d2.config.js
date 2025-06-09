@@ -14,9 +14,9 @@ limitations under the License.*/
 
 const config = {
   type: "app",
-  title: "DHIS2 ArcGIS Connector",
-  name: "DHIS2 ArcGIS Connector",
-  description: "Connect your DHIS2 to ArcGIS",
+  title: "ArcGIS Connector",
+  name: "arcgis-connector",
+  description: "Connect your DHIS2 data directly to the ArcGIS system.",
   author: "Esri",
   dataStoreNamespace: "dhis2-arcgis-app-ns",
   minDHIS2Version: "2.40.0",
