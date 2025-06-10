@@ -16,6 +16,7 @@ const config = {
   type: "app",
   title: "ArcGIS Connector",
   name: "arcgis-connector",
+  id: "fdb63534-ab28-43a1-af93-02f57110f234",
   description: "Connect your DHIS2 data directly to the ArcGIS system.",
   author: "Esri",
   dataStoreNamespace: "dhis2-arcgis-app-ns",
