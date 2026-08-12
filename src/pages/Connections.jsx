@@ -27,8 +27,8 @@ import {
   CalcitePagination,
 } from "@esri/calcite-components-react";
 
-import { useNavigate } from "react-router-dom";
-import { queryForServices } from "../util/portal";
+import { useNavigate, useLocation } from "react-router-dom";
+import { queryForServices, pollForServices } from "../util/portal";
 
 const StyledContainer = styled.div`
   padding: 1rem;
@@ -46,27 +46,51 @@ const StyledPageHeader = styled.h1`
 
 const Connections = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const { userCredential, portalProperties } = useAuth();
+  const { userCredential } = useAuth();
 
   const [services, setServices] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const [sortConfig, setSortConfig] = useState({
     key: "created",
     direction: "desc",
   });
 
-  async function fetchServices() {
-    const response = await queryForServices(
-      userCredential.server,
-      userCredential.token
-    );
-    console.log(response);
-    setServices(response);
-  }
+  const fetchServices = async () => {
+    setIsRefreshing(true);
+    try {
+      const response = await queryForServices(
+        userCredential.server,
+        userCredential.token
+      );
+      setServices(response || []);
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    if (userCredential) {
+    if (!userCredential) return;
+
+    // A freshly created Connection may lag the ArcGIS search index, so poll for
+    // it instead of a single fetch. The title is handed over via nav state.
+    const newConnectionTitle = location.state?.newConnectionTitle;
+    if (newConnectionTitle) {
+      // Clear nav state so a later manual refresh doesn't re-trigger the poll.
+      navigate(location.pathname, { replace: true, state: {} });
+      setIsRefreshing(true);
+      pollForServices({
+        server: userCredential.server,
+        token: userCredential.token,
+        predicate: (service) =>
+          service.title === newConnectionTitle ||
+          service.name === newConnectionTitle,
+      })
+        .then((results) => setServices(results || []))
+        .finally(() => setIsRefreshing(false));
+    } else {
       fetchServices();
     }
   }, [userCredential]);
@@ -134,6 +158,17 @@ const Connections = () => {
           }}
         >
           {i18n.t("Add New Connection")}
+        </CalciteButton>
+        <CalciteButton
+          style={{ marginLeft: "0.5rem" }}
+          scale="l"
+          appearance="outline"
+          iconStart="refresh"
+          loading={isRefreshing}
+          disabled={isRefreshing}
+          onClick={fetchServices}
+        >
+          {i18n.t("Refresh")}
         </CalciteButton>
       </div>
       <div
