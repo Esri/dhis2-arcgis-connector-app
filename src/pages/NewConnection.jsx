@@ -19,10 +19,12 @@ import {
   CalciteStepper,
   CalciteStepperItem,
   CalciteInput,
+  CalciteNotice,
 } from "@esri/calcite-components-react";
 
 import { DataDimension, PeriodDimension, dataTypeMap } from "@dhis2/analytics";
 import OrgUnitDimensionWrapper from "../components/OrgUnitDimensionWrapper";
+import useOrgUnitGeometry from "../hooks/useOrgUnitGeometry";
 import { useAuth } from "../contexts/AuthContext";
 import { useSystemSettings } from "../contexts/SystemSettingsContext";
 
@@ -76,6 +78,11 @@ const NewConnection = ({
   const [selectedOrgUnits, setSelectedOrgUnits] = useState([]);
   const [selectedDimensions, setSelectedDimensions] = useState([]);
   const [selectedPeriods, setSelectedPeriods] = useState([]);
+
+  // Single geometry-type validity for the org-unit step (issue #42).
+  const geometry = useOrgUnitGeometry(selectedOrgUnits);
+  const canLeaveOrgUnitStep =
+    selectedOrgUnits.length > 0 && !geometry.loading && geometry.valid;
 
   const [cdfParams, setCdfParams] = useState({
     tableLayout: "true",
@@ -319,10 +326,41 @@ const NewConnection = ({
             <br />
           </Description>
           <OrgUnitDimensionWrapper onChange={setSelectedOrgUnits} />
+          {selectedOrgUnits.length > 0 && geometry.status === "mixed" && (
+            <CalciteNotice open kind="danger" icon scale="m">
+              <div slot="title">{i18n.t("Mixed geometry types")}</div>
+              <div slot="message">
+                {i18n.t(
+                  "The selected organisation units resolve to more than one geometry type ({{types}}). A Connection supports a single geometry type — remove units so only one type remains, or create separate Connections.",
+                  { types: geometry.geometryTypes.join(" and ") }
+                )}
+              </div>
+            </CalciteNotice>
+          )}
+          {selectedOrgUnits.length > 0 && geometry.status === "partial" && (
+            <CalciteNotice open kind="warning" icon scale="m">
+              <div slot="title">{i18n.t("Some units have no geometry")}</div>
+              <div slot="message">
+                {i18n.t(
+                  "Some selected organisation units have no geometry. They will be included as table-only rows in the Connection."
+                )}
+              </div>
+            </CalciteNotice>
+          )}
+          {selectedOrgUnits.length > 0 && geometry.status === "none" && (
+            <CalciteNotice open kind="info" icon scale="m">
+              <div slot="title">{i18n.t("Table-only Connection")}</div>
+              <div slot="message">
+                {i18n.t(
+                  "None of the selected organisation units have geometry. This will create a table-only Connection with no map layer."
+                )}
+              </div>
+            </CalciteNotice>
+          )}
         </CalciteStepperItem>
         <CalciteStepperItem
           heading={i18n.t("Data")}
-          {...(selectedOrgUnits.length === 0 ? { disabled: true } : undefined)}
+          {...(canLeaveOrgUnitStep ? undefined : { disabled: true })}
         >
           <Description>
             <div
@@ -462,7 +500,10 @@ const NewConnection = ({
             scale="l"
             loading={isCurrentlyCreatingLayer || isCheckingName}
             onClick={handleCreateLayer}
-            {...(isLayerNameAvailable && isLayerNameValid && !isCheckingName
+            {...(isLayerNameAvailable &&
+            isLayerNameValid &&
+            !isCheckingName &&
+            geometry.valid
               ? {}
               : { disabled: true })}
           >
