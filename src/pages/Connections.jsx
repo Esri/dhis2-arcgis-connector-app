@@ -18,17 +18,23 @@ import styled from "styled-components";
 import i18n from "@dhis2/d2-i18n";
 
 import { useAuth } from "../contexts/AuthContext";
+import { useAppAlert, ALERT_TYPES } from "../hooks/useAppAlert";
 import {
   CalciteTable,
   CalciteTableHeader,
   CalciteTableRow,
   CalciteTableCell,
   CalciteButton,
+  CalciteDialog,
   CalcitePagination,
 } from "@esri/calcite-components-react";
 
 import { useNavigate, useLocation } from "react-router-dom";
-import { queryForServices, pollForServices } from "../util/portal";
+import {
+  queryForServices,
+  pollForServices,
+  deleteConnection,
+} from "../util/portal";
 
 const StyledContainer = styled.div`
   padding: 1rem;
@@ -48,7 +54,9 @@ const Connections = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { userCredential } = useAuth();
+  const { userCredential, userInformation, hostingServerProperties } =
+    useAuth();
+  const { showAlert } = useAppAlert();
 
   const [services, setServices] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -57,6 +65,10 @@ const Connections = () => {
     key: "created",
     direction: "desc",
   });
+
+  // The Connection awaiting delete confirmation, and the id being deleted.
+  const [connectionToDelete, setConnectionToDelete] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const fetchServices = async () => {
     setIsRefreshing(true);
@@ -139,6 +151,52 @@ const Connections = () => {
     return sortConfig.direction === "asc" ? "sorted asc" : "sorted desc";
   };
 
+  // The CDF service name lives in the item URL (.../rest/services/<name>/FeatureServer).
+  const getServiceName = (service) => {
+    const afterServices = service.url?.split("/rest/services/")[1];
+    return afterServices ? afterServices.split("/")[0] : service.name;
+  };
+
+  const isOwnedByCurrentUser = (service) =>
+    userInformation?.username != null &&
+    userInformation.username === service.owner;
+
+  const handleConfirmDelete = async () => {
+    const service = connectionToDelete;
+    if (!service) return;
+
+    setDeletingId(service.id);
+    try {
+      await deleteConnection({
+        portalUrl: userCredential.server,
+        hostingServerUrl: hostingServerProperties.url,
+        owner: service.owner,
+        itemId: service.id,
+        serviceName: getServiceName(service),
+        token: userCredential.token,
+      });
+      setServices((prev) => prev.filter((s) => s.id !== service.id));
+      setConnectionToDelete(null);
+      showAlert({
+        title: i18n.t("Connection removed"),
+        message: i18n.t(
+          "The Connection and its ArcGIS artifacts were permanently deleted."
+        ),
+        type: ALERT_TYPES.SUCCESS,
+      });
+    } catch (err) {
+      console.error("Error removing connection", err);
+      showAlert({
+        title: i18n.t("Error removing Connection"),
+        autoClose: false,
+        message: err?.message || String(err),
+        type: ALERT_TYPES.DANGER,
+      });
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <StyledContainer>
       <div
@@ -181,7 +239,7 @@ const Connections = () => {
       </div>
       <div>
         {i18n.t(
-          "Connections are live feeds to your DHIS2 data. The data remains in DHIS2. To delete connections, you can do so from the ArcGIS Enterprise portal."
+          "Connections are live feeds to your DHIS2 data. The data remains in DHIS2. You can remove Connections you own directly from this page."
         )}
       </div>
 
@@ -229,6 +287,10 @@ const Connections = () => {
               heading="View in ArcGIS"
               alignment="center"
             ></CalciteTableHeader>
+            <CalciteTableHeader
+              heading="Remove"
+              alignment="center"
+            ></CalciteTableHeader>
           </CalciteTableRow>
 
           {sortedData.map((service) => (
@@ -252,11 +314,61 @@ const Connections = () => {
                   {i18n.t("Open")}
                 </CalciteButton>
               </CalciteTableCell>
+              <CalciteTableCell alignment="center">
+                {isOwnedByCurrentUser(service) && (
+                  <CalciteButton
+                    scale="m"
+                    appearance="transparent"
+                    kind="danger"
+                    iconStart="trash"
+                    loading={deletingId === service.id}
+                    disabled={deletingId !== null}
+                    onClick={() => setConnectionToDelete(service)}
+                  >
+                    {i18n.t("Remove")}
+                  </CalciteButton>
+                )}
+              </CalciteTableCell>
             </CalciteTableRow>
           ))}
         </CalciteTable>
       )}
-      {/* <CalcitePagination
+
+      <CalciteDialog
+        modal
+        kind="danger"
+        open={connectionToDelete !== null}
+        heading={i18n.t("Remove Connection")}
+        escapeDisabled={deletingId !== null}
+        outsideCloseDisabled={deletingId !== null}
+        onCalciteDialogClose={() => {
+          if (deletingId === null) setConnectionToDelete(null);
+        }}
+      >
+        <div>
+          {i18n.t(
+            'This permanently deletes the feature layer "{{title}}" and will break anything using it in ArcGIS Enterprise. This action cannot be undone.',
+            { title: connectionToDelete?.title }
+          )}
+        </div>
+        <CalciteButton
+          slot="secondary"
+          appearance="outline"
+          disabled={deletingId !== null}
+          onClick={() => setConnectionToDelete(null)}
+        >
+          {i18n.t("Cancel")}
+        </CalciteButton>
+        <CalciteButton
+          slot="primary"
+          kind="danger"
+          iconStart="trash"
+          loading={deletingId !== null}
+          onClick={handleConfirmDelete}
+        >
+          {i18n.t("Remove")}
+        </CalciteButton>
+      </CalciteDialog>
         pageSize={10}
         startItem={0}
         totalItems={sortedData.length}

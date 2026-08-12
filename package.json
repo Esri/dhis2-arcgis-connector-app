@@ -5,10 +5,11 @@
   "license": "BSD-3-Clause",
   "private": true,
   "scripts": {
-    "build": "d2-app-scripts build",
-    "start": "d2-app-scripts start",
+    "build": "node scripts/copy-calcite-assets.js && d2-app-scripts build",
+    "start": "node scripts/copy-calcite-assets.js && d2-app-scripts start",
     "test": "d2-app-scripts test",
-    "deploy": "d2-app-scripts deploy"
+    "deploy": "d2-app-scripts deploy",
+    "postinstall": "node scripts/copy-calcite-assets.js"
   },
   "devDependencies": {
     "@dhis2/cli-app-scripts": "^12.0.0"

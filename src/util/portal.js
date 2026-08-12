@@ -101,3 +101,60 @@ export async function isServiceNameAvailable(server, serviceName, token) {
     ? false
     : true;
 }
+
+async function postForm(url, token) {
+  const body = new URLSearchParams({ f: "json", token }).toString();
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body,
+  });
+  return response.json();
+}
+
+export async function deleteCdfService(
+  hostingServerUrl,
+  serviceName,
+  token,
+  serviceType = "FeatureServer"
+) {
+  const url = `${hostingServerUrl}/admin/services/${serviceName}.${serviceType}/delete`;
+  const data = await postForm(url, token);
+  if (data?.status === "error") {
+    throw new Error(
+      data.messages?.join("; ") || "Failed to delete the CDF service."
+    );
+  }
+  return data;
+}
+
+export async function deletePortalItem(portalUrl, owner, itemId, token) {
+  const url = `${portalUrl}/sharing/rest/content/users/${owner}/items/${itemId}/delete`;
+  const data = await postForm(url, token);
+  if (data?.error) {
+    throw new Error(data.error.message || "Failed to delete the portal item.");
+  }
+  return data;
+}
+
+// Removes both ArcGIS artifacts behind a Connection: the CDF service (admin) is
+// deleted first so the portal item delete can't race a cascade. Reused by both
+// Remove-a-Connection and Preview's Discard.
+export async function deleteConnection({
+  portalUrl,
+  hostingServerUrl,
+  owner,
+  itemId,
+  serviceName,
+  token,
+  serviceType = "FeatureServer",
+}) {
+  const service = await deleteCdfService(
+    hostingServerUrl,
+    serviceName,
+    token,
+    serviceType
+  );
+  const item = await deletePortalItem(portalUrl, owner, itemId, token);
+  return { service, item };
+}
