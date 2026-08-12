@@ -74,10 +74,11 @@ import "./locales/index.js";
 
 import AppShell from "./components/AppShell.jsx";
 
-setAssetPath("https://unpkg.com/@esri/calcite-components/dist/calcite/assets");
-
-// Local assets -- Does not work when deploying!
-// setAssetPath(window.location.href);
+// Self-hosted Calcite assets (vendored by scripts/copy-calcite-assets.js) so
+// icons and component translations load offline / in ArcGIS Enterprise without
+// external CDN access. Resolved against the app root, the same way other
+// public/ assets (e.g. the app icon) are referenced.
+setAssetPath(new URL("assets", document.baseURI).href);
 
 const App = () => {
   return (
