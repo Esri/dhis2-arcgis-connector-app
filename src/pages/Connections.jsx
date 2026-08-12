@@ -31,6 +31,7 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import { queryForServices, deleteConnection } from "../util/portal";
+import { getSortIndicator } from "../util/sort";
 
 const StyledContainer = styled.div`
   padding: 1rem;
@@ -118,10 +119,7 @@ const Connections = () => {
     setSortConfig({ key, direction });
   };
 
-  const getArrow = (key) => {
-    if (sortConfig.key !== key) return null;
-    return sortConfig.direction === "asc" ? "sorted asc" : "sorted desc";
-  };
+  const getSortGlyph = (key) => getSortIndicator(key, sortConfig).glyph;
 
   // The CDF service name lives in the item URL (.../rest/services/<name>/FeatureServer).
   const getServiceName = (service) => {
@@ -223,25 +221,25 @@ const Connections = () => {
               heading="Title"
               style={{ cursor: "pointer" }}
               onClick={() => requestSort("title")}
-              description={getArrow("title")}
+              description={getSortGlyph("title")}
             ></CalciteTableHeader>
             <CalciteTableHeader
               heading="Description"
               onClick={() => requestSort("description")}
               style={{ cursor: "pointer" }}
-              description={getArrow("description")}
+              description={getSortGlyph("description")}
             ></CalciteTableHeader>
             {/* <CalciteTableHeader heading="URL"></CalciteTableHeader> */}
             <CalciteTableHeader
               heading="Created By"
               onClick={() => requestSort("owner")}
               style={{ cursor: "pointer" }}
-              description={getArrow("owner")}
+              description={getSortGlyph("owner")}
             ></CalciteTableHeader>
             <CalciteTableHeader
               style={{ cursor: "pointer" }}
               onClick={() => requestSort("created")}
-              description={getArrow("created")}
+              description={getSortGlyph("created")}
               heading="Created On"
             ></CalciteTableHeader>
             <CalciteTableHeader
