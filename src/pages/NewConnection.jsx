@@ -29,6 +29,11 @@ import { useSystemSettings } from "../contexts/SystemSettingsContext";
 import { cdfTemplate } from "../template/cdfTemplate";
 import { useAppAlert, ALERT_TYPES } from "../hooks/useAppAlert";
 import { createService, isServiceNameAvailable } from "../util/portal";
+import {
+  suggestConnectionName,
+  suggestDescription,
+  applyNameSuffix,
+} from "../util/suggestions";
 
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
@@ -90,6 +95,8 @@ const NewConnection = ({
   const [isLayerNameAvailable, setIsLayerNameAvailable] = useState(true);
   const [isCheckingName, setIsCheckingName] = useState(false);
   const [layerDescription, setLayerDescription] = useState("");
+  const [nameEdited, setNameEdited] = useState(false);
+  const [descriptionEdited, setDescriptionEdited] = useState(false);
 
   const encode = (string) =>
     btoa(string).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
@@ -223,6 +230,7 @@ const NewConnection = ({
 
   const handleLayerNameChange = (event) => {
     setIsCheckingName(true);
+    setNameEdited(true);
     const newLayerName = event.target.value;
     setLayerName(newLayerName);
 
@@ -279,6 +287,72 @@ const NewConnection = ({
       setIsCheckingName(false);
     }, 500);
   };
+
+  // Finds an available service name, auto-suffixing (_2, _3, ...) on collision
+  // via the existing availability check.
+  const findAvailableName = async (base) => {
+    if (!base || !userCredential?.server || !userCredential?.token) {
+      return base;
+    }
+    let occurrence = 1;
+    let candidate = applyNameSuffix(base, occurrence);
+    while (occurrence <= 50) {
+      const available = await isServiceNameAvailable(
+        userCredential.server,
+        candidate,
+        userCredential.token
+      );
+      if (available) {
+        return candidate;
+      }
+      occurrence += 1;
+      candidate = applyNameSuffix(base, occurrence);
+    }
+    return candidate;
+  };
+
+  // Pre-fill an editable suggested name/description on the Summary step from the
+  // current selection. User edits are never overwritten by later suggestions.
+  useEffect(() => {
+    if (currentStep !== 4) {
+      return;
+    }
+
+    let cancelled = false;
+    const selection = {
+      dataItems: selectedDimensions,
+      orgUnits: selectedOrgUnits,
+      periods: selectedPeriods,
+    };
+
+    if (!descriptionEdited) {
+      const description = suggestDescription(selection);
+      if (description) {
+        setLayerDescription(description);
+      }
+    }
+
+    if (!nameEdited) {
+      const base = suggestConnectionName(selection);
+      if (base) {
+        setIsCheckingName(true);
+        findAvailableName(base).then((available) => {
+          if (cancelled) {
+            return;
+          }
+          setLayerName(available);
+          setIsLayerNameValid(true);
+          setIsLayerNameAvailable(true);
+          setIsCheckingName(false);
+        });
+      }
+    }
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
 
   return (
     <div
@@ -438,9 +512,10 @@ const NewConnection = ({
               style={{
                 width: "65%",
               }}
-              onCalciteInputInput={(event) =>
-                setLayerDescription(event.target.value)
-              }
+              onCalciteInputInput={(event) => {
+                setDescriptionEdited(true);
+                setLayerDescription(event.target.value);
+              }}
               placeholder={i18n.t("Enter a description for your layer")}
             />
           </div>
