@@ -367,6 +367,8 @@ const Connections = () => {
           {i18n.t("Remove")}
         </CalciteButton>
       </CalciteDialog>
+
+      {/* <CalcitePagination
         pageSize={10}
         startItem={0}
         totalItems={sortedData.length}
