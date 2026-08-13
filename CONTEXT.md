@@ -17,3 +17,12 @@ The Custom Data Feed service registered on the hosting server (via `admin/servic
 **Preview**:
 Creating a Connection's real feature service and inspecting it (map + attribute table) before committing. The user then keeps it or discards it; discarding deletes the just-created portal item and CDF service.
 _Avoid_: Draft, Trial
+
+**Resolves to**:
+The concrete set of organisation units a selection expands to. A level or group selection (e.g. "District", "Hospitals") plus a boundary expands to many units; step 1 reports how many it resolves to so a mismatch is visible rather than silent.
+
+**Mappable units**:
+The organisation units in a selection that have geometry (points or polygons) and will appear on the map. Units without geometry become table-only rows. The resolves-to count is of mappable units.
+
+**Boundary**:
+The ancestor organisation unit(s) a level/group selection is evaluated under ("districts _under_ this boundary"). Defaults to the signed-in user's accessible roots when none is explicitly chosen.
