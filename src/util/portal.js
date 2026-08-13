@@ -132,6 +132,11 @@ export async function deletePortalItem(portalUrl, owner, itemId, token) {
   const url = `${portalUrl}/sharing/rest/content/users/${owner}/items/${itemId}/delete`;
   const data = await postForm(url, token);
   if (data?.error) {
+    // Deleting the CDF service cascade-deletes its portal item, so a follow-up
+    // "already gone" is the outcome we wanted, not a failure to surface.
+    if (/does not exist or is inaccessible/i.test(data.error.message || "")) {
+      return { success: true, itemId, alreadyDeleted: true };
+    }
     throw new Error(data.error.message || "Failed to delete the portal item.");
   }
   return data;
