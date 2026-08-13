@@ -31,6 +31,7 @@ import { useSystemSettings } from "../contexts/SystemSettingsContext";
 import { cdfTemplate } from "../template/cdfTemplate";
 import { useAppAlert, ALERT_TYPES } from "../hooks/useAppAlert";
 import { createService, isServiceNameAvailable } from "../util/portal";
+import { isFinalStep, canAdvanceStep } from "../util/wizardSteps";
 import {
   suggestConnectionName,
   suggestDescription,
@@ -109,6 +110,12 @@ const NewConnection = ({
     btoa(string).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
 
   const debounceRef = useRef();
+  const stepperRef = useRef();
+
+  const canAdvanceCurrentStep = canAdvanceStep(currentStep, {
+    canLeaveOrgUnitStep,
+    hasDataItems: selectedDimensions.length > 0,
+  });
 
   // useEffect(() => {
   //   console.log("hello render!");
@@ -372,7 +379,7 @@ const NewConnection = ({
       }}
     >
       <CalciteStepper
-        // ref={stepperRef}
+        ref={stepperRef}
         numbered
         onCalciteStepperChange={(event) => {
           console.log("stepChange", event);
@@ -564,12 +571,20 @@ const NewConnection = ({
           marginTop: "1rem",
           display: "flex",
           justifyContent: "center",
+          gap: "1rem",
           width: "100%",
           borderTop: "1px solid var(--calcite-ui-border-3)",
           paddingTop: "1rem",
         }}
       >
-        {currentStep === 4 ? (
+        <CalciteButton
+          scale="l"
+          appearance="outline"
+          onClick={() => navigate("/connections")}
+        >
+          {i18n.t("Cancel")}
+        </CalciteButton>
+        {isFinalStep(currentStep) ? (
           <CalciteButton
             iconStart="add-layer-service"
             scale="l"
@@ -582,11 +597,16 @@ const NewConnection = ({
               ? {}
               : { disabled: true })}
           >
-            Create Connection
+            {i18n.t("Create Connection")}
           </CalciteButton>
         ) : (
-          <CalciteButton scale="l" onClick={() => navigate("/connections")}>
-            Cancel
+          <CalciteButton
+            iconEnd="chevron-right"
+            scale="l"
+            onClick={() => stepperRef.current?.nextStep()}
+            {...(canAdvanceCurrentStep ? {} : { disabled: true })}
+          >
+            {i18n.t("Next")}
           </CalciteButton>
         )}
       </div>
