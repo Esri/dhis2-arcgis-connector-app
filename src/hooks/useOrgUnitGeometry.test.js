@@ -63,7 +63,7 @@ const evaluate = async (geoFeatures, selected) => {
 
 const point = (id) => ({ id, ty: 1 });
 const polygon = (id) => ({ id, ty: 2 });
-const sel = (...ids) => ids.map((id) => ({ id }));
+const sel = (...ids) => ids;
 
 it("blocks a mixed selection through the provider seam", async () => {
   const text = await evaluate(
