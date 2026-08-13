@@ -350,7 +350,7 @@ const Connections = () => {
           )}
         </div>
         <CalciteButton
-          slot="secondary"
+          slot="footer-start"
           appearance="outline"
           disabled={deletingId !== null}
           onClick={() => setConnectionToDelete(null)}
@@ -358,7 +358,7 @@ const Connections = () => {
           {i18n.t("Cancel")}
         </CalciteButton>
         <CalciteButton
-          slot="primary"
+          slot="footer-end"
           kind="danger"
           iconStart="trash"
           loading={deletingId !== null}

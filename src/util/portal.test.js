@@ -183,6 +183,28 @@ describe("deleteConnection", () => {
     await expect(deleteConnection(baseArgs)).rejects.toThrow("no permission");
     expect(global.fetch).toHaveBeenCalledTimes(2);
   });
+
+  it("treats an already-deleted portal item as success (service delete cascaded)", async () => {
+    global.fetch
+      .mockReturnValueOnce(okJson({ status: "success" }))
+      .mockReturnValueOnce(
+        okJson({
+          error: {
+            code: 400,
+            message: "Item does not exist or is inaccessible.",
+          },
+        })
+      );
+
+    const result = await deleteConnection(baseArgs);
+
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect(result.item).toEqual({
+      success: true,
+      itemId: "abc123",
+      alreadyDeleted: true,
+    });
+  });
 });
 
 describe("canPreview", () => {

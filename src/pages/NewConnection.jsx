@@ -508,6 +508,7 @@ const NewConnection = ({
         </>
       ) : (
         <>
+          <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
           <CalciteStepper
         ref={stepperRef}
         numbered
@@ -719,9 +720,11 @@ const NewConnection = ({
           </div>
         </CalciteStepperItem>
       </CalciteStepper>
+          </div>
       <div
         style={{
           marginTop: "1rem",
+          flexShrink: 0,
           display: "flex",
           justifyContent: "center",
           gap: "1rem",
