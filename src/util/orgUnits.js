@@ -18,3 +18,30 @@ export const pickUserRoots = (me = {}) => {
   const dataCapture = me?.organisationUnits ?? [];
   return dataView.length ? dataView : dataCapture;
 };
+
+const LEVEL_PREFIX = "LEVEL-";
+const OU_GROUP_PREFIX = "OU_GROUP-";
+
+const isLevel = (id) => id.startsWith(LEVEL_PREFIX);
+const isGroup = (id) => id.startsWith(OU_GROUP_PREFIX);
+// An explicit org unit or dynamic keyword (e.g. USER_ORGUNIT) can serve as the
+// boundary a level or group is evaluated under; a level/group id cannot.
+const isBoundary = (id) => !isLevel(id) && !isGroup(id);
+
+// Turns the raw org-unit selection into the resolved `ou` dimension ids used by
+// both the geoFeatures pre-check and the created service. A level or group only
+// resolves against a boundary ancestor, so when the author picked a level/group
+// but checked no explicit unit, the user's roots are injected as that boundary.
+export const resolveOuDimension = (selection = [], userRoots = []) => {
+  const ids = selection.map((item) => item.id).filter(Boolean);
+
+  const hasLevelOrGroup = ids.some((id) => isLevel(id) || isGroup(id));
+  const hasBoundary = ids.some((id) => isBoundary(id));
+
+  if (!hasLevelOrGroup || hasBoundary) {
+    return ids;
+  }
+
+  const rootIds = userRoots.map((root) => root.id).filter(Boolean);
+  return [...new Set([...rootIds, ...ids])];
+};
