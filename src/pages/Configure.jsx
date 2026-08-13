@@ -16,7 +16,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import i18n from "@dhis2/d2-i18n";
-import { useConfig } from "@dhis2/app-runtime";
 
 import {
   CalciteButton,
@@ -84,8 +83,6 @@ const Configure = () => {
   const { settings, updateSetting, isLoadingSettings } = useSystemSettings();
   const { showAlert } = useAppAlert();
   const { setOAuthConfig, setUserCredential, signOut } = useAuth();
-  const { baseUrl } = useConfig();
-  // console.log(baseUrl);
 
   const [clientId, setClientId] = useState(settings?.arcgisConfig?.clientId);
   const [portalUrl, setPortalUrl] = useState(settings?.arcgisConfig?.portalUrl);
@@ -153,13 +150,13 @@ const Configure = () => {
       <StyledCalciteInputText
         prefixText={i18n.t("Redirect URL")}
         readOnly
-        value={baseUrl}
+        value={window.location.origin}
       >
         <StyledCalciteButtonCopyToClipboard
           slot="action"
           iconStart={redirectUrlIcon}
           onClick={() => {
-            navigator.clipboard.writeText(baseUrl);
+            navigator.clipboard.writeText(window.location.origin);
             setRedirectUrlIcon("check");
             setTimeout(() => {
               setRedirectUrlIcon("copy-to-clipboard");
