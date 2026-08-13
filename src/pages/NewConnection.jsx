@@ -24,13 +24,20 @@ import {
 
 import { DataDimension, PeriodDimension, dataTypeMap } from "@dhis2/analytics";
 import OrgUnitDimensionWrapper from "../components/OrgUnitDimensionWrapper";
+import PreviewPanel from "../components/PreviewPanel";
 import useOrgUnitGeometry from "../hooks/useOrgUnitGeometry";
 import { useAuth } from "../contexts/AuthContext";
 import { useSystemSettings } from "../contexts/SystemSettingsContext";
 
 import { cdfTemplate } from "../template/cdfTemplate";
 import { useAppAlert, ALERT_TYPES } from "../hooks/useAppAlert";
-import { createService, isServiceNameAvailable } from "../util/portal";
+import {
+  isServiceNameAvailable,
+  canPreview,
+  createPreview,
+  keepPreview,
+  deleteConnection,
+} from "../util/portal";
 import { isFinalStep, canAdvanceStep } from "../util/wizardSteps";
 import {
   suggestConnectionName,
@@ -105,6 +112,12 @@ const NewConnection = ({
   const [layerDescription, setLayerDescription] = useState("");
   const [nameEdited, setNameEdited] = useState(false);
   const [descriptionEdited, setDescriptionEdited] = useState(false);
+
+  // The just-created preview Connection (real service + item), or null while
+  // still editing. Its presence swaps the wizard for the preview view.
+  const [previewHandle, setPreviewHandle] = useState(null);
+  const [isKeeping, setIsKeeping] = useState(false);
+  const [isDiscarding, setIsDiscarding] = useState(false);
 
   const encode = (string) =>
     btoa(string).replace(/\+/g, "-").replace(/\//g, "_").replace(/=/g, "");
@@ -187,60 +200,99 @@ const NewConnection = ({
   //         <p>Final Encoded Params: {finalEncodedParams}</p>
   //       </div>
 
-  const handleCreateLayer = async () => {
-    setIsCurrentlyCreatingLayer(true);
-
-    const url = `${hostingServerProperties.url}/admin/services/createService`;
-
-    // make a copy of cdfTemplate
-    const body = { ...cdfTemplate };
-    body.f = "json";
-    body.token = userCredential.token;
-    body.service.serviceName = layerName;
-    body.service.description = layerDescription;
-    body.service.jsonProperties.customDataProviderInfo.dataProviderHost =
+  // Deep-clones the CDF template (its `service` object is shared module state)
+  // and fills in the current selection to form the createService request body.
+  const buildCreateServiceBody = () => {
+    const service = JSON.parse(JSON.stringify(cdfTemplate.service));
+    service.serviceName = layerName;
+    service.description = layerDescription;
+    service.jsonProperties.customDataProviderInfo.dataProviderHost =
       finalEncodedParams;
+    return new URLSearchParams({
+      f: "json",
+      token: userCredential.token,
+      service: JSON.stringify(service),
+    }).toString();
+  };
 
-    body.service = JSON.stringify(body.service);
-
-    const formBody = new URLSearchParams(body).toString();
-
+  // Preview creates the real feature service (ADR-0001), then the author Keeps
+  // or Discards it. Preconditions are enforced by the Preview button's gate.
+  const handlePreview = async () => {
+    setIsCurrentlyCreatingLayer(true);
     try {
-      const response = await createService(
-        hostingServerProperties.url,
-        formBody
-      );
-      console.log(response);
-      if (response.status === "success") {
-        showAlert({
-          title: i18n.t("Layer created successfully"),
-          autoClose: false,
-          message: i18n.t(
-            "Your layer has been created successfully. You can now use it in ArcGIS."
-          ),
-          type: ALERT_TYPES.SUCCESS,
-        });
-        navigate("/connections", {
-          state: { newConnectionTitle: layerName },
-        });
-      } else {
-        showAlert({
-          title: i18n.t("Error creating layer"),
-          autoClose: false,
-          message: JSON.stringify(response),
-          type: ALERT_TYPES.DANGER,
-        });
-      }
+      const handle = await createPreview({
+        portalUrl: userCredential.server,
+        hostingServerUrl: hostingServerProperties.url,
+        token: userCredential.token,
+        serviceName: layerName,
+        formBody: buildCreateServiceBody(),
+      });
+      setPreviewHandle({
+        ...handle,
+        hasGeometry: geometry.status !== "none",
+      });
     } catch (err) {
-      console.error("Error creating layer", err);
+      console.error("Error creating preview", err);
       showAlert({
-        title: i18n.t("Error creating layer"),
+        title: i18n.t("Error creating preview"),
         autoClose: false,
-        message: JSON.stringify(err),
+        message: String(err?.message || err),
         type: ALERT_TYPES.DANGER,
       });
     } finally {
       setIsCurrentlyCreatingLayer(false);
+    }
+  };
+
+  // Keep commits the previewed Connection: no recreation, just strip the
+  // preview tag (best-effort) and go to the Connections list.
+  const handleKeep = async () => {
+    if (!previewHandle) return;
+    setIsKeeping(true);
+    try {
+      await keepPreview({
+        portalUrl: userCredential.server,
+        owner: previewHandle.owner,
+        itemId: previewHandle.itemId,
+        token: userCredential.token,
+        typeKeywords: previewHandle.typeKeywords,
+      });
+    } catch (err) {
+      // A failed untag must never block the commit; the tag just lingers.
+      console.warn("Could not remove the preview tag on keep", err);
+    } finally {
+      setIsKeeping(false);
+      navigate("/connections", {
+        state: { newConnectionTitle: previewHandle.serviceName },
+      });
+    }
+  };
+
+  // Discard deletes both artifacts (portal item + CDF service) and returns to
+  // editing the same selection.
+  const handleDiscard = async () => {
+    if (!previewHandle) return;
+    setIsDiscarding(true);
+    try {
+      await deleteConnection({
+        portalUrl: userCredential.server,
+        hostingServerUrl: hostingServerProperties.url,
+        owner: previewHandle.owner,
+        itemId: previewHandle.itemId,
+        serviceName: previewHandle.serviceName,
+        token: userCredential.token,
+      });
+      setPreviewHandle(null);
+    } catch (err) {
+      console.error("Error discarding preview", err);
+      showAlert({
+        title: i18n.t("Error discarding preview"),
+        autoClose: false,
+        message: String(err?.message || err),
+        type: ALERT_TYPES.DANGER,
+      });
+    } finally {
+      setIsDiscarding(false);
     }
   };
 
@@ -380,7 +432,68 @@ const NewConnection = ({
         justifyContent: "space-between",
       }}
     >
-      <CalciteStepper
+      {previewHandle ? (
+        <>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              flex: 1,
+              minHeight: 0,
+              gap: "1rem",
+            }}
+          >
+            <h2 style={{ fontSize: "1.5rem", fontWeight: 600, margin: 0 }}>
+              {i18n.t("Preview of {{name}}", {
+                name: previewHandle.serviceName,
+              })}
+            </h2>
+            <Description>
+              {i18n.t(
+                "This preview is the real Connection. Keep it to finish, or Discard to delete it and continue editing."
+              )}
+            </Description>
+            <PreviewPanel
+              serviceUrl={previewHandle.serviceUrl}
+              hasGeometry={previewHandle.hasGeometry}
+            />
+          </div>
+          <div
+            style={{
+              marginTop: "1rem",
+              display: "flex",
+              justifyContent: "center",
+              gap: "1rem",
+              width: "100%",
+              borderTop: "1px solid var(--calcite-ui-border-3)",
+              paddingTop: "1rem",
+            }}
+          >
+            <CalciteButton
+              scale="l"
+              appearance="outline"
+              kind="danger"
+              iconStart="trash"
+              loading={isDiscarding}
+              {...(isKeeping ? { disabled: true } : {})}
+              onClick={handleDiscard}
+            >
+              {i18n.t("Discard")}
+            </CalciteButton>
+            <StyledCreateCalciteButton
+              scale="l"
+              iconStart="check"
+              loading={isKeeping}
+              {...(isDiscarding ? { disabled: true } : {})}
+              onClick={handleKeep}
+            >
+              {i18n.t("Keep")}
+            </StyledCreateCalciteButton>
+          </div>
+        </>
+      ) : (
+        <>
+          <CalciteStepper
         ref={stepperRef}
         numbered
         onCalciteStepperChange={(event) => {
@@ -588,18 +701,20 @@ const NewConnection = ({
         </CalciteButton>
         {isFinalStep(currentStep) ? (
           <CalciteButton
-            iconStart="add-layer-service"
+            iconStart="map"
             scale="l"
             loading={isCurrentlyCreatingLayer || isCheckingName}
-            onClick={handleCreateLayer}
-            {...(isLayerNameAvailable &&
-            isLayerNameValid &&
-            !isCheckingName &&
-            geometry.valid
+            onClick={handlePreview}
+            {...(canPreview({
+              isLayerNameValid,
+              isLayerNameAvailable,
+              isCheckingName,
+              geometryValid: geometry.valid,
+            })
               ? {}
               : { disabled: true })}
           >
-            {i18n.t("Create Connection")}
+            {i18n.t("Preview")}
           </CalciteButton>
         ) : (
           <CalciteButton
@@ -612,6 +727,8 @@ const NewConnection = ({
           </CalciteButton>
         )}
       </div>
+        </>
+      )}
     </div>
   );
 };
