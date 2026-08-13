@@ -13,14 +13,19 @@ limitations under the License.*/
 
 import { useDataQuery } from "@dhis2/app-runtime";
 
-// Fetches the root org units associated with the current user with fallback to data capture org units
+import { pickUserRoots } from "../util/orgUnits";
+
+// Fetches the signed-in user's root org units: their analytics data-view org
+// units, falling back to their data-capture org units.
 const ORG_UNIT_ROOTS_QUERY = {
-  roots: {
-    resource: "organisationUnits",
-    params: () => ({
-      fields: ["id", "displayName~rename(name)", "path"],
-      userDataViewFallback: true,
-    }),
+  me: {
+    resource: "me",
+    params: {
+      fields: [
+        "organisationUnits[id,displayName~rename(name),path]",
+        "dataViewOrganisationUnits[id,displayName~rename(name),path]",
+      ],
+    },
   },
 };
 
@@ -28,7 +33,7 @@ const useOrgUnitRoots = () => {
   const { loading, error, data } = useDataQuery(ORG_UNIT_ROOTS_QUERY);
 
   return {
-    roots: data?.roots?.organisationUnits,
+    roots: data ? pickUserRoots(data.me) : undefined,
     error,
     loading,
   };

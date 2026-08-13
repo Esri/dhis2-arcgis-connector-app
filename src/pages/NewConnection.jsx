@@ -11,7 +11,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.*/
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import i18n from "@dhis2/d2-i18n";
 
 import {
@@ -26,6 +26,8 @@ import { DataDimension, PeriodDimension, dataTypeMap } from "@dhis2/analytics";
 import OrgUnitDimensionWrapper from "../components/OrgUnitDimensionWrapper";
 import PreviewPanel from "../components/PreviewPanel";
 import useOrgUnitGeometry from "../hooks/useOrgUnitGeometry";
+import useOrgUnitRoots from "../hooks/useOrgUnitRoots";
+import { resolveOuDimension } from "../util/orgUnits";
 import { useAuth } from "../contexts/AuthContext";
 import { useSystemSettings } from "../contexts/SystemSettingsContext";
 
@@ -96,8 +98,17 @@ const NewConnection = ({
   const [selectedDimensions, setSelectedDimensions] = useState([]);
   const [selectedPeriods, setSelectedPeriods] = useState([]);
 
+  const { roots } = useOrgUnitRoots();
+
+  // Levels/groups resolve against the user's roots; this resolved ou is the
+  // single source for both the geometry pre-check and the created service (#58).
+  const resolvedOuIds = useMemo(
+    () => resolveOuDimension(selectedOrgUnits, roots),
+    [selectedOrgUnits, roots]
+  );
+
   // Single geometry-type validity for the org-unit step (issue #42).
-  const geometry = useOrgUnitGeometry(selectedOrgUnits);
+  const geometry = useOrgUnitGeometry(resolvedOuIds);
   const canLeaveOrgUnitStep =
     selectedOrgUnits.length > 0 && !geometry.loading && geometry.valid;
 
@@ -148,7 +159,7 @@ const NewConnection = ({
   useEffect(() => {
     const dimensions = selectedDimensions.map((dimension) => dimension.id);
     const periods = selectedPeriods.map((period) => period.id);
-    const orgUnits = selectedOrgUnits.map((orgUnit) => orgUnit.id);
+    const orgUnits = resolvedOuIds;
 
     const finalStringParams = `dimension=dx:${dimensions.join(
       ";"
@@ -184,7 +195,7 @@ const NewConnection = ({
     setDebugInfo(newDebugInfo);
 
     updateDebugInfo(newDebugInfo);
-  }, [selectedOrgUnits, selectedDimensions, selectedPeriods]);
+  }, [resolvedOuIds, selectedOrgUnits, selectedDimensions, selectedPeriods]);
 
   // <div>
   //         <p>Selected Org Units: {JSON.stringify(selectedOrgUnits)}</p>
@@ -526,6 +537,29 @@ const NewConnection = ({
             <br />
           </Description>
           <OrgUnitDimensionWrapper onChange={setSelectedOrgUnits} />
+          {selectedOrgUnits.length > 0 && (
+            <div
+              style={{
+                margin: "0.75rem 0",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+            >
+              {geometry.loading
+                ? i18n.t("Checking your selection…")
+                : geometry.mappableCount > 0
+                ? i18n.t(
+                    "Resolves to {{count}} mappable organisation units • geometry: {{types}}",
+                    {
+                      count: geometry.mappableCount,
+                      types: geometry.geometryTypes.join(" and "),
+                    }
+                  )
+                : i18n.t(
+                    "Resolves to a table-only Connection (no mapped organisation units)."
+                  )}
+            </div>
+          )}
           {selectedOrgUnits.length > 0 && geometry.status === "mixed" && (
             <CalciteNotice open kind="danger" icon scale="m">
               <div slot="title">{i18n.t("Mixed geometry types")}</div>
