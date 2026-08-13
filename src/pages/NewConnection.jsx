@@ -213,7 +213,9 @@ const NewConnection = ({
           ),
           type: ALERT_TYPES.SUCCESS,
         });
-        navigate("/connections");
+        navigate("/connections", {
+          state: { newConnectionTitle: layerName },
+        });
       } else {
         showAlert({
           title: i18n.t("Error creating layer"),
