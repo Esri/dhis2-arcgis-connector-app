@@ -28,6 +28,32 @@ export async function queryForServices(server, token) {
   return response.data?.results;
 }
 
+// Bounded poll that re-pulls the Connections list until `predicate` matches a
+// result (covering ArcGIS search-index lag after a create) or attempts run out.
+// Returns the most recent results either way. `query` and `wait` are injectable
+// for testing.
+export async function pollForServices({
+  server,
+  token,
+  predicate,
+  attempts = 5,
+  delayMs = 1500,
+  query = queryForServices,
+  wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+}) {
+  let results = [];
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    results = (await query(server, token)) || [];
+    if (results.some(predicate)) {
+      return results;
+    }
+    if (attempt < attempts - 1) {
+      await wait(delayMs);
+    }
+  }
+  return results;
+}
+
 export async function getUserInfo(portalUrl, userId, token) {
   const userInfoUrl = `${portalUrl}/sharing/rest/community/users/${userId}?f=json&token=${token}`;
   const userInfoResponse = await fetch(userInfoUrl);
