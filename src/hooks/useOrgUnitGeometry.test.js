@@ -87,3 +87,48 @@ it("allows a table-only selection when no unit has geometry", async () => {
   const text = await evaluate([], sel("a", "b"));
   expect(text).toBe("true|none|");
 });
+
+// The real app mounts this hook before any org unit is chosen, then the
+// selection arrives. Geometry must be fetched on that transition, not only when
+// the selection is present at mount.
+const evaluateAfterMount = async (geoFeatures, selected) => {
+  const container = document.createElement("div");
+  document.body.appendChild(container);
+
+  const render = (sel) =>
+    act(async () => {
+      ReactDOM.render(
+        <CustomDataProvider data={{ geoFeatures }}>
+          <Probe selected={sel} />
+        </CustomDataProvider>,
+        container
+      );
+    });
+
+  // Mount with an empty selection (lazy), then supply the real selection.
+  await render([]);
+  await render(selected);
+
+  const read = () => container.querySelector('[data-testid="out"]').textContent;
+  for (let i = 0; i < 50 && read() === "loading"; i++) {
+    // eslint-disable-next-line no-await-in-loop
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+  }
+
+  const text = read();
+  act(() => {
+    ReactDOM.unmountComponentAtNode(container);
+  });
+  container.remove();
+  return text;
+};
+
+it("fetches geometry when the selection arrives after mount", async () => {
+  const text = await evaluateAfterMount(
+    [polygon("a"), polygon("b")],
+    sel("a", "b")
+  );
+  expect(text).toBe("true|ok|Polygon");
+});

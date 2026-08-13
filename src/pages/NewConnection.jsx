@@ -38,7 +38,11 @@ import {
   keepPreview,
   deleteConnection,
 } from "../util/portal";
-import { isFinalStep, canAdvanceStep } from "../util/wizardSteps";
+import {
+  isFinalStep,
+  canAdvanceStep,
+  WIZARD_STEP_COUNT,
+} from "../util/wizardSteps";
 import {
   suggestConnectionName,
   suggestDescription,
@@ -720,7 +724,11 @@ const NewConnection = ({
           <CalciteButton
             iconEnd="chevron-right"
             scale="l"
-            onClick={() => stepperRef.current?.nextStep()}
+            onClick={() => {
+              stepperRef.current?.nextStep();
+              // nextStep() emits no calciteStepperChange, so advance our state too.
+              setCurrentStep((step) => Math.min(step + 1, WIZARD_STEP_COUNT));
+            }}
             {...(canAdvanceCurrentStep ? {} : { disabled: true })}
           >
             {i18n.t("Next")}
