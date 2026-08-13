@@ -23,12 +23,11 @@ const GEO_FEATURES_QUERY = {
   },
 };
 
-// Resolves the geometry validity of the current org-unit selection from DHIS2
+// Resolves the geometry validity of a resolved `ou` selection from DHIS2
 // geoFeatures, exposing the single block/warn/allow flag the wizard consumes.
-const useOrgUnitGeometry = (selectedOrgUnits = []) => {
-  const ids = selectedOrgUnits.map((orgUnit) => orgUnit.id);
-  const ou = ids.join(";");
-  const enabled = ids.length > 0;
+const useOrgUnitGeometry = (ouIds = []) => {
+  const ou = ouIds.join(";");
+  const enabled = ouIds.length > 0;
 
   const { called, loading, error, data, refetch } = useDataQuery(
     GEO_FEATURES_QUERY,
@@ -49,7 +48,7 @@ const useOrgUnitGeometry = (selectedOrgUnits = []) => {
   return {
     loading: enabled && (!called || loading),
     error,
-    ...evaluateGeometrySelection({ geoFeatures, selectedCount: ids.length }),
+    ...evaluateGeometrySelection({ geoFeatures, selectedCount: ouIds.length }),
   };
 };
 
