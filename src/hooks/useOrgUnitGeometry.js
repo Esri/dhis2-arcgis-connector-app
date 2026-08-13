@@ -11,6 +11,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.*/
 
+import { useEffect } from "react";
 import { useDataQuery } from "@dhis2/app-runtime";
 
 import { evaluateGeometrySelection } from "../util/geometry";
@@ -26,17 +27,27 @@ const GEO_FEATURES_QUERY = {
 // geoFeatures, exposing the single block/warn/allow flag the wizard consumes.
 const useOrgUnitGeometry = (selectedOrgUnits = []) => {
   const ids = selectedOrgUnits.map((orgUnit) => orgUnit.id);
+  const ou = ids.join(";");
   const enabled = ids.length > 0;
 
-  const { loading, error, data } = useDataQuery(GEO_FEATURES_QUERY, {
-    lazy: !enabled,
-    variables: { ou: ids.join(";") },
-  });
+  const { called, loading, error, data, refetch } = useDataQuery(
+    GEO_FEATURES_QUERY,
+    { lazy: true, variables: { ou } }
+  );
 
-  const geoFeatures = data?.geoFeatures ?? [];
+  // The selection isn't known at mount and changes as the user edits it, so a
+  // lazy query that auto-fires only on mount would never run. Fetch on every
+  // selection change instead.
+  useEffect(() => {
+    if (enabled) {
+      refetch({ ou });
+    }
+  }, [ou, enabled, refetch]);
+
+  const geoFeatures = enabled ? data?.geoFeatures ?? [] : [];
 
   return {
-    loading: enabled && loading,
+    loading: enabled && (!called || loading),
     error,
     ...evaluateGeometrySelection({ geoFeatures, selectedCount: ids.length }),
   };
