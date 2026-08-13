@@ -48,6 +48,7 @@ const useOrgUnitGeometry = (ouIds = []) => {
   return {
     loading: enabled && (!called || loading),
     error,
+    mappableCount: geoFeatures.length,
     ...evaluateGeometrySelection({ geoFeatures, selectedCount: ouIds.length }),
   };
 };

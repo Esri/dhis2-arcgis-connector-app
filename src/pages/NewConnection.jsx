@@ -537,6 +537,29 @@ const NewConnection = ({
             <br />
           </Description>
           <OrgUnitDimensionWrapper onChange={setSelectedOrgUnits} />
+          {selectedOrgUnits.length > 0 && (
+            <div
+              style={{
+                margin: "0.75rem 0",
+                fontSize: "15px",
+                fontWeight: 500,
+              }}
+            >
+              {geometry.loading
+                ? i18n.t("Checking your selection…")
+                : geometry.mappableCount > 0
+                ? i18n.t(
+                    "Resolves to {{count}} mappable organisation units • geometry: {{types}}",
+                    {
+                      count: geometry.mappableCount,
+                      types: geometry.geometryTypes.join(" and "),
+                    }
+                  )
+                : i18n.t(
+                    "Resolves to a table-only Connection (no mapped organisation units)."
+                  )}
+            </div>
+          )}
           {selectedOrgUnits.length > 0 && geometry.status === "mixed" && (
             <CalciteNotice open kind="danger" icon scale="m">
               <div slot="title">{i18n.t("Mixed geometry types")}</div>
