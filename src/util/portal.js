@@ -158,3 +158,117 @@ export async function deleteConnection({
   const item = await deletePortalItem(portalUrl, owner, itemId, token);
   return { service, item };
 }
+
+// typeKeyword stamped on Preview-created services so previews abandoned via a
+// hard close stay discoverable (and cleanable) as orphans (ADR-0001).
+export const PREVIEW_TYPE_KEYWORD = "dhis2Preview";
+
+// Pure precondition gate for Preview. Per ADR-0001 Preview is the real create,
+// so the name must be valid + available and the single geometry-type check
+// (issue #42) must pass before it runs.
+export const canPreview = ({
+  isLayerNameValid = false,
+  isLayerNameAvailable = false,
+  isCheckingName = true,
+  geometryValid = false,
+} = {}) =>
+  Boolean(
+    isLayerNameValid && isLayerNameAvailable && !isCheckingName && geometryValid
+  );
+
+// Full replace of an item's typeKeywords via the portal item update endpoint.
+export async function updatePortalItemTypeKeywords(
+  portalUrl,
+  owner,
+  itemId,
+  typeKeywords,
+  token
+) {
+  const url = `${portalUrl}/sharing/rest/content/users/${owner}/items/${itemId}/update`;
+  const body = new URLSearchParams({
+    f: "json",
+    token,
+    typeKeywords: (typeKeywords || []).join(","),
+  }).toString();
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body,
+  });
+  const data = await response.json();
+  if (data?.error) {
+    throw new Error(data.error.message || "Failed to update the portal item.");
+  }
+  return data;
+}
+
+// Resolves the portal item a just-created service belongs to. The ArcGIS search
+// index lags a fresh create, so poll the Connections list until it appears.
+async function resolvePreviewItem(portalUrl, serviceName, token) {
+  const matches = (service) =>
+    service.title === serviceName || service.name === serviceName;
+  const results = await pollForServices({
+    server: portalUrl,
+    token,
+    predicate: matches,
+  });
+  return results.find(matches);
+}
+
+// Preview lifecycle — create side. Creates the real feature service, resolves
+// its portal item, stamps it with the preview typeKeyword, and returns the
+// handle used to render, Keep, or Discard it. Collaborators are injectable so
+// the orchestration is testable through this seam.
+export async function createPreview({
+  portalUrl,
+  hostingServerUrl,
+  token,
+  serviceName,
+  formBody,
+  create = createService,
+  resolveItem = resolvePreviewItem,
+  updateTypeKeywords = updatePortalItemTypeKeywords,
+}) {
+  const response = await create(hostingServerUrl, formBody);
+  if (response?.status !== "success") {
+    throw new Error(
+      (Array.isArray(response?.messages) && response.messages.join("; ")) ||
+        "Failed to create the preview service."
+    );
+  }
+
+  const item = await resolveItem(portalUrl, serviceName, token);
+  if (!item) {
+    throw new Error(
+      "The preview service was created but its portal item could not be found."
+    );
+  }
+
+  const typeKeywords = Array.from(
+    new Set([...(item.typeKeywords || []), PREVIEW_TYPE_KEYWORD])
+  );
+  await updateTypeKeywords(portalUrl, item.owner, item.id, typeKeywords, token);
+
+  return {
+    itemId: item.id,
+    owner: item.owner,
+    serviceName,
+    serviceUrl: item.url,
+    typeKeywords,
+  };
+}
+
+// Preview lifecycle — Keep side. Commit strips the preview typeKeyword so a
+// later orphan sweep can't mistake a kept Connection for an abandoned preview.
+export async function keepPreview({
+  portalUrl,
+  owner,
+  itemId,
+  token,
+  typeKeywords = [],
+  updateTypeKeywords = updatePortalItemTypeKeywords,
+}) {
+  const remaining = typeKeywords.filter((k) => k !== PREVIEW_TYPE_KEYWORD);
+  await updateTypeKeywords(portalUrl, owner, itemId, remaining, token);
+  return remaining;
+}
