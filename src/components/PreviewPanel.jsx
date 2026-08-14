@@ -24,7 +24,7 @@ import "@arcgis/core/assets/esri/themes/light/main.css";
 
 const Container = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: ${(props) => (props.$horizontal ? "row" : "column")};
   gap: 1rem;
   flex: 1;
   min-height: 0;
@@ -32,12 +32,14 @@ const Container = styled.div`
 
 const MapSurface = styled.div`
   flex: 1;
+  min-width: 0;
   min-height: 260px;
   border: 1px solid var(--calcite-ui-border-3);
 `;
 
 const TableSurface = styled.div`
   flex: 1;
+  min-width: 0;
   min-height: 220px;
   border: 1px solid var(--calcite-ui-border-3);
 `;
@@ -86,7 +88,7 @@ const PreviewPanel = ({ serviceUrl, hasGeometry }) => {
   }, [serviceUrl, hasGeometry]);
 
   return (
-    <Container>
+    <Container $horizontal={hasGeometry}>
       {hasGeometry ? (
         <MapSurface ref={mapRef} />
       ) : (

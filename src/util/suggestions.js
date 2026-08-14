@@ -16,13 +16,17 @@ const MAX_NAME_LENGTH = 50;
 const displayNameOf = (item) =>
   item?.name ?? item?.displayName ?? item?.label ?? item?.id ?? "";
 
-const nameWithMore = (items) => {
-  if (!items.length) {
-    return "";
+// "A", "A and B", "A, B and C" — lists every name so the description spells the
+// selection out rather than hiding extras behind an "and N more" count.
+const listNames = (items) => {
+  const names = items.map(displayNameOf).filter(Boolean);
+  if (names.length <= 1) {
+    return names[0] ?? "";
   }
-  const first = displayNameOf(items[0]);
-  const more = items.length - 1;
-  return more > 0 ? `${first} and ${more} more` : first;
+  if (names.length === 2) {
+    return `${names[0]} and ${names[1]}`;
+  }
+  return `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
 };
 
 // Sanitize to an ArcGIS-safe service name: disallowed runs become "_",
@@ -49,32 +53,38 @@ export const applyNameSuffix = (base, occurrence) => {
   return `${trimmed.replace(/_+$/, "")}${suffix}`;
 };
 
-// Suggested service name from the selection: first data item + first org unit
-// + first period, with a short "_plusN" count when multiple are selected.
+// Org units are listed in the name only up to this many; beyond it the name
+// would get unwieldy (e.g. 10 districts), so they are dropped and left to the
+// description.
+const ORG_UNITS_IN_NAME_LIMIT = 3;
+
+// Suggested service name from the selection: first data item, the org units
+// (only when few enough to stay readable), and first period. Extra data
+// items/periods and large org-unit sets are reflected in the description, not
+// the name.
 export const suggestConnectionName = ({
   dataItems = [],
   orgUnits = [],
   periods = [],
 } = {}) => {
-  const parts = [dataItems[0], orgUnits[0], periods[0]]
-    .filter(Boolean)
-    .map(displayNameOf)
+  const orgUnitParts =
+    orgUnits.length > 0 && orgUnits.length <= ORG_UNITS_IN_NAME_LIMIT
+      ? orgUnits.map(displayNameOf)
+      : [];
+
+  const parts = [displayNameOf(dataItems[0]), ...orgUnitParts, displayNameOf(periods[0])]
     .filter(Boolean);
 
   if (!parts.length) {
     return "";
   }
 
-  const extra =
-    Math.max(0, dataItems.length - 1) +
-    Math.max(0, orgUnits.length - 1) +
-    Math.max(0, periods.length - 1);
-
-  const base = sanitizeName(parts.join("_"));
-  return capName(extra > 0 ? `${base}_plus${extra}` : base);
+  return capName(sanitizeName(parts.join("_")));
 };
 
-// Readable, editable default description for the Summary step.
+// Readable, editable default description for the Summary step. Every selected
+// data item, org unit, and period is listed so the author can see exactly what
+// the Connection covers.
 export const suggestDescription = ({
   dataItems = [],
   orgUnits = [],
@@ -85,10 +95,10 @@ export const suggestDescription = ({
   }
 
   const lead = dataItems.length
-    ? nameWithMore(dataItems)
+    ? listNames(dataItems)
     : "Organisation unit data";
-  const where = orgUnits.length ? ` in ${nameWithMore(orgUnits)}` : "";
-  const when = periods.length ? ` for ${nameWithMore(periods)}` : "";
+  const where = orgUnits.length ? ` in ${listNames(orgUnits)}` : "";
+  const when = periods.length ? ` for ${listNames(periods)}` : "";
 
   return `${lead}${where}${when}.`;
 };
