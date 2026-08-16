@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-05-30T20:47:07.365Z\n"
-"PO-Revision-Date: 2025-05-30T20:47:07.365Z\n"
+"POT-Creation-Date: 2026-08-14T13:59:50.228Z\n"
+"PO-Revision-Date: 2026-08-14T13:59:50.231Z\n"
 
 msgid "Debug Information"
 msgstr "Debug Information"
@@ -47,6 +47,16 @@ msgstr "Configure"
 msgid "Sign In"
 msgstr "Sign In"
 
+msgid "Table-only preview"
+msgstr "Table-only preview"
+
+msgid ""
+"The selected organisation units have no geometry, so this preview shows the "
+"attribute table only with no map."
+msgstr ""
+"The selected organisation units have no geometry, so this preview shows the "
+"attribute table only with no map."
+
 msgid "Manage Connections"
 msgstr "Manage Connections"
 
@@ -85,21 +95,49 @@ msgstr "Portal URL"
 msgid "Save Configuration"
 msgstr "Save Configuration"
 
+msgid "Connection removed"
+msgstr "Connection removed"
+
+msgid "The Connection and its ArcGIS artifacts were permanently deleted."
+msgstr "The Connection and its ArcGIS artifacts were permanently deleted."
+
+msgid "Error removing Connection"
+msgstr "Error removing Connection"
+
 msgid "Add New Connection"
 msgstr "Add New Connection"
+
+msgid "Refresh"
+msgstr "Refresh"
 
 msgid "View all existing connections"
 msgstr "View all existing connections"
 
 msgid ""
 "Connections are live feeds to your DHIS2 data. The data remains in DHIS2. "
-"To delete connections, you can do so from the ArcGIS Enterprise portal."
+"You can remove connections you own directly from this page."
 msgstr ""
 "Connections are live feeds to your DHIS2 data. The data remains in DHIS2. "
-"To delete connections, you can do so from the ArcGIS Enterprise portal."
+"You can remove connections you own directly from this page."
 
 msgid "Open"
 msgstr "Open"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Remove Connection"
+msgstr "Remove Connection"
+
+msgid ""
+"This permanently deletes the feature layer \"{{title}}\" and will break "
+"anything using it in ArcGIS Enterprise. This action cannot be undone."
+msgstr ""
+"This permanently deletes the feature layer \"{{title}}\" and will break "
+"anything using it in ArcGIS Enterprise. This action cannot be undone."
+
+msgid "Cancel"
+msgstr "Cancel"
 
 msgid "Welcome to the"
 msgstr "Welcome to the"
@@ -128,14 +166,11 @@ msgstr "Sign In with ArcGIS Enterprise"
 msgid "View the documentation here"
 msgstr "View the documentation here"
 
-msgid "Layer created successfully"
-msgstr "Layer created successfully"
+msgid "Error creating preview"
+msgstr "Error creating preview"
 
-msgid "Your layer has been created successfully. You can now use it in ArcGIS."
-msgstr "Your layer has been created successfully. You can now use it in ArcGIS."
-
-msgid "Error creating layer"
-msgstr "Error creating layer"
+msgid "Error discarding preview"
+msgstr "Error discarding preview"
 
 msgid ""
 "Layer names cannot contain spaces or any special characters except "
@@ -150,6 +185,22 @@ msgid ""
 msgstr ""
 "The layer name you have entered already exists. Please choose a different "
 "name."
+
+msgid "Preview of {{name}}"
+msgstr "Preview of {{name}}"
+
+msgid ""
+"This preview is the real connection. Keep it to finish, or discard to "
+"delete it and continue editing."
+msgstr ""
+"This preview is the real connection. Keep it to finish, or discard to "
+"delete it and continue editing."
+
+msgid "Discard"
+msgstr "Discard"
+
+msgid "Keep"
+msgstr "Keep"
 
 msgid "Select the organisation units below to aggregate your data."
 msgstr "Select the organisation units below to aggregate your data."
@@ -160,6 +211,44 @@ msgid ""
 msgstr ""
 "Combining organisation units with different geography types is not "
 "supported. Please make separate connections for different geography types."
+
+msgid "Checking your selection…"
+msgstr "Checking your selection…"
+
+msgid "Resolves to a table-only Connection (no mapped organisation units)."
+msgstr "Resolves to a table-only Connection (no mapped organisation units)."
+
+msgid "Mixed geometry types"
+msgstr "Mixed geometry types"
+
+msgid ""
+"The selected organisation units resolve to more than one geometry type "
+"({{types}}). A Connection supports a single geometry type — remove units so "
+"only one type remains, or create separate Connections."
+msgstr ""
+"The selected organisation units resolve to more than one geometry type "
+"({{types}}). A Connection supports a single geometry type — remove units so "
+"only one type remains, or create separate Connections."
+
+msgid "Some units have no geometry"
+msgstr "Some units have no geometry"
+
+msgid ""
+"Some selected organisation units have no geometry. They will be included as "
+"table-only rows in the Connection."
+msgstr ""
+"Some selected organisation units have no geometry. They will be included as "
+"table-only rows in the Connection."
+
+msgid "Table-only Connection"
+msgstr "Table-only Connection"
+
+msgid ""
+"None of the selected organisation units have geometry. This will create a "
+"table-only Connection with no map layer."
+msgstr ""
+"None of the selected organisation units have geometry. This will create a "
+"table-only Connection with no map layer."
 
 msgid "Data"
 msgstr "Data"
@@ -184,6 +273,13 @@ msgstr ""
 "Create a title and description for your new ArcGIS Enterprise Layer. Both "
 "fields may be changed later in ArcGIS Enterprise."
 
+msgid ""
+"The suggested name and description below are generated automatically from "
+"your selection, check for accuracy and edit as needed."
+msgstr ""
+"The suggested name and description below are generated automatically from "
+"your selection, check for accuracy and edit as needed."
+
 msgid "Layer Name"
 msgstr "Layer Name"
 
@@ -195,3 +291,9 @@ msgstr "Layer Description"
 
 msgid "Enter a description for your layer"
 msgstr "Enter a description for your layer"
+
+msgid "Preview"
+msgstr "Preview"
+
+msgid "Next"
+msgstr "Next"

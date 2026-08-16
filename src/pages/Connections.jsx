@@ -39,10 +39,12 @@ import { getSortIndicator } from "../util/sort";
 
 const StyledContainer = styled.div`
   padding: 1rem;
-  height: 100vh;
+  height: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  overflow: hidden;
 `;
 
 const StyledPageHeader = styled.h1`
@@ -73,6 +75,10 @@ const Connections = () => {
 
   const fetchServices = async () => {
     setIsRefreshing(true);
+    // A fast refresh looks like a glitch, so keep the spinner up long enough to
+    // read as a full rotation.
+    const start = Date.now();
+    const MIN_SPIN_MS = 800;
     try {
       const response = await queryForServices(
         userCredential.server,
@@ -80,6 +86,12 @@ const Connections = () => {
       );
       setServices(response || []);
     } finally {
+      const elapsed = Date.now() - start;
+      if (elapsed < MIN_SPIN_MS) {
+        await new Promise((resolve) =>
+          setTimeout(resolve, MIN_SPIN_MS - elapsed)
+        );
+      }
       setIsRefreshing(false);
     }
   };
@@ -237,19 +249,20 @@ const Connections = () => {
       </div>
       <div>
         {i18n.t(
-          "Connections are live feeds to your DHIS2 data. The data remains in DHIS2. You can remove Connections you own directly from this page."
+          "Connections are live feeds to your DHIS2 data. The data remains in DHIS2. You can remove connections you own directly from this page."
         )}
       </div>
 
-      {services.length > 0 && (
-        <CalciteTable
-          style={{
-            maxHeight: "calc(75vh - 200px)",
-          }}
-          numbered
-          interactionMode="static"
-          striped
-        >
+      <div
+        style={{
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
+          overflowX: "hidden",
+        }}
+      >
+        {services.length > 0 && (
+        <CalciteTable numbered interactionMode="static" striped>
           <CalciteTableRow
             slot="table-header"
             alignment="center"
@@ -330,7 +343,8 @@ const Connections = () => {
             </CalciteTableRow>
           ))}
         </CalciteTable>
-      )}
+        )}
+      </div>
 
       <CalciteDialog
         modal

@@ -19,6 +19,8 @@ import {
   CalciteStepper,
   CalciteStepperItem,
   CalciteInput,
+  CalciteTextArea,
+  CalciteLabel,
   CalciteNotice,
 } from "@esri/calcite-components-react";
 
@@ -56,14 +58,16 @@ import { useNavigate } from "react-router-dom";
 
 import ReactJsonView from "@microlink/react-json-view";
 
-const StyledCalciteInputText = styled(CalciteInput)`
-  --calcite-input-prefix-size: 140px;
-  width: 400px;
+const FieldLabelText = styled.span`
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
 `;
 
 const Description = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 0.5rem;
   justify-content: left;
   text-align: left;
   color: dark grey;
@@ -441,10 +445,12 @@ const NewConnection = ({
     <div
       style={{
         padding: "1rem",
-        height: "100vh",
+        height: "100%",
+        boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
+        overflow: "hidden",
       }}
     >
       {previewHandle ? (
@@ -463,11 +469,11 @@ const NewConnection = ({
                 name: previewHandle.serviceName,
               })}
             </h2>
-            <Description>
+            <div style={{ fontSize: "16px", color: "dark grey" }}>
               {i18n.t(
-                "This preview is the real Connection. Keep it to finish, or Discard to delete it and continue editing."
+                "This preview is the real connection. Keep it to finish, or discard to delete it and continue editing."
               )}
-            </Description>
+            </div>
             <PreviewPanel
               serviceUrl={previewHandle.serviceUrl}
               hasGeometry={previewHandle.hasGeometry}
@@ -508,7 +514,14 @@ const NewConnection = ({
         </>
       ) : (
         <>
-          <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
+          <div
+            style={{
+              flex: 1,
+              minHeight: 0,
+              overflowY: "auto",
+              overflowX: "hidden",
+            }}
+          >
           <CalciteStepper
         ref={stepperRef}
         numbered
@@ -529,13 +542,11 @@ const NewConnection = ({
                 "Select the organisation units below to aggregate your data."
               )}
             </div>
-            <br />
             <div>
               {i18n.t(
                 "Combining organisation units with different geography types is not supported. Please make separate connections for different geography types."
               )}
             </div>
-            <br />
           </Description>
           <OrgUnitDimensionWrapper onChange={setSelectedOrgUnits} />
           {selectedOrgUnits.length > 0 && (
@@ -606,7 +617,6 @@ const NewConnection = ({
             >
               {i18n.t("Select data items to include in your ArcGIS Layer. ")}
             </div>
-            <br />
             <div>
               {i18n.t(
                 "Note: Data elements with conflicting aggregation types will cause the layer creation to fail. If you would like to only connect geographies for organisation units, do not select any data items."
@@ -654,13 +664,11 @@ const NewConnection = ({
             >
               {i18n.t("Select the time period for your selected data.")}
             </div>
-            <br />
             <div>
               {i18n.t(
                 "Data may be additionally filtered by time in ArcGIS Enterprise applications and maps."
               )}
             </div>
-            <br />
           </Description>
           <div
             style={{
@@ -685,38 +693,53 @@ const NewConnection = ({
         </CalciteStepperItem>
         <CalciteStepperItem heading="Summary">
           <Description>
-            {i18n.t(
-              "Create a title and description for your new ArcGIS Enterprise Layer. Both fields may be changed later in ArcGIS Enterprise."
-            )}
-            <br />
+            <div
+              style={{
+                fontSize: "16px",
+                fontWeight: "bold",
+              }}
+            >
+              {i18n.t(
+                "Create a title and description for your new ArcGIS Enterprise Layer. Both fields may be changed later in ArcGIS Enterprise."
+              )}
+            </div>
+            <div>
+              {i18n.t(
+                "The suggested name and description below are generated automatically from your selection, check for accuracy and edit as needed."
+              )}
+            </div>
           </Description>
           <div
             style={{
               display: "flex",
               flexDirection: "column",
               gap: "1rem",
-              alignItems: "flex-start",
+              alignItems: "stretch",
+              width: "100%",
+              maxWidth: "720px",
             }}
           >
-            <StyledCalciteInputText
-              prefixText={i18n.t("Layer Name")}
-              value={layerName}
-              // onCalciteInputInput={(event) => setLayerName(event.target.value)}
-              onCalciteInputInput={(event) => handleLayerNameChange(event)}
-              placeholder={i18n.t("Enter a unique layer name")}
-            />
-            <StyledCalciteInputText
-              prefixText={i18n.t("Layer Description")}
-              value={layerDescription}
-              style={{
-                width: "65%",
-              }}
-              onCalciteInputInput={(event) => {
-                setDescriptionEdited(true);
-                setLayerDescription(event.target.value);
-              }}
-              placeholder={i18n.t("Enter a description for your layer")}
-            />
+            <CalciteLabel style={{ width: "100%" }}>
+              <FieldLabelText>{i18n.t("Layer Name")}</FieldLabelText>
+              <CalciteInput
+                style={{ fontFamily: "var(--calcite-sans-family)" }}
+                value={layerName}
+                onCalciteInputInput={(event) => handleLayerNameChange(event)}
+                placeholder={i18n.t("Enter a unique layer name")}
+              />
+            </CalciteLabel>
+            <CalciteLabel style={{ width: "100%" }}>
+              <FieldLabelText>{i18n.t("Layer Description")}</FieldLabelText>
+              <CalciteTextArea
+                value={layerDescription}
+                rows={4}
+                placeholder={i18n.t("Enter a description for your layer")}
+                onCalciteTextAreaInput={(event) => {
+                  setDescriptionEdited(true);
+                  setLayerDescription(event.target.value);
+                }}
+              />
+            </CalciteLabel>
           </div>
         </CalciteStepperItem>
       </CalciteStepper>

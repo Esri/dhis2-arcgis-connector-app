@@ -59,14 +59,39 @@ describe("suggestConnectionName", () => {
     ).toBe("Malaria_Sierra_Leone_2020");
   });
 
-  it("appends a short count when more than one item is selected", () => {
+  it("uses only the first of each dimension, without a count suffix", () => {
     expect(
       suggestConnectionName({
         dataItems: [{ name: "Malaria" }, { name: "TB" }],
         orgUnits: [{ name: "Bo" }],
         periods: [{ name: "2020" }, { name: "2021" }],
       })
-    ).toBe("Malaria_Bo_2020_plus2");
+    ).toBe("Malaria_Bo_2020");
+  });
+
+  it("lists up to three org units in the name", () => {
+    expect(
+      suggestConnectionName({
+        dataItems: [{ name: "Malaria" }],
+        orgUnits: [{ name: "Bo" }, { name: "Bombali" }, { name: "Kono" }],
+        periods: [{ name: "2020" }],
+      })
+    ).toBe("Malaria_Bo_Bombali_Kono_2020");
+  });
+
+  it("omits org units from the name when more than three are selected", () => {
+    expect(
+      suggestConnectionName({
+        dataItems: [{ name: "Malaria" }],
+        orgUnits: [
+          { name: "Bo" },
+          { name: "Bombali" },
+          { name: "Kono" },
+          { name: "Kailahun" },
+        ],
+        periods: [{ name: "2020" }],
+      })
+    ).toBe("Malaria_2020");
   });
 
   it("falls back to displayName", () => {
@@ -104,14 +129,14 @@ describe("suggestDescription", () => {
     ).toBe("Malaria in Sierra Leone for 2020.");
   });
 
-  it("summarizes additional items with a count", () => {
+  it("lists every selected item by name", () => {
     expect(
       suggestDescription({
         dataItems: [{ name: "Malaria" }, { name: "TB" }],
-        orgUnits: [{ name: "Sierra Leone" }],
+        orgUnits: [{ name: "Sierra Leone" }, { name: "Bombali" }, { name: "Bo" }],
         periods: [{ name: "2020" }],
       })
-    ).toBe("Malaria and 1 more in Sierra Leone for 2020.");
+    ).toBe("Malaria and TB in Sierra Leone, Bombali and Bo for 2020.");
   });
 
   it("describes a geometry/table-only selection with no data items", () => {
